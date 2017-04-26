@@ -9,12 +9,6 @@ def createbase():
     out += " F,0,0,500000,1\n"
     out += " M,0,0,500000,320,{}\n".format(findsetting("Receptor_Y"))
 
-    # Double Scroll Black Bar (Hidden by default)
-    out += "Sprite,Background,Centre,\"SB/black_bar.png\",320,240"
-    out += " R,0,0,500000,1.570796\n"
-    out += " F,0,0,500000,0\n"
-    out += " M,0,0,500000,{},390\n".format(findsetting("Receptor_X"))
-
     # Four Star Black Bars (Hidden by default)
     out += "Sprite,Background,Centre,\"SB/black_bar.png\",320,240\n"
     out += " R,0,0,500000,0.7853982\n"

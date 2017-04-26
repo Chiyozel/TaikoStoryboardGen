@@ -26,10 +26,12 @@ scrollingtypes = [
     "Upside Down",
     "Boost",
     "Four Star",
-    "Wave Type I",
-    "Double Wave Type I",
-    "Wave Type II",
-    "Double Wave Type II"
+    "Sine Wave",
+    "Double Sine Wave",
+    "Inverted Sine Wave",
+    "Double Invert Sine Wave",
+    "Triangle Wave",
+    "Double Triangle Wave",
 ]
 
 notealterations = [
@@ -102,13 +104,35 @@ def callmod(x, y, notes, bpm):
                 if case2(8):
                     out = sbmods.scrolls.star(notes, bpm)
                 if case2(9):
-                    out = sbmods.scrolls.wave1(notes, bpm)
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.wave(notes, bpm, 0, amplitude, freq)
                 if case2(10):
-                    out = sbmods.scrolls.dwave1(notes, bpm)
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.doublewave(notes, bpm, 0, amplitude, freq)
                 if case2(11):
-                    out = sbmods.scrolls.wave2(notes, bpm)
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.wave(notes, bpm, 1, amplitude, freq)
                 if case2(12):
-                    out = sbmods.scrolls.dwave2(notes, bpm)
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.doublewave(notes, bpm, 1, amplitude, freq)
+                if case2(13):
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.wave(notes, bpm, 2, amplitude, freq)
+                if case2(14):
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.doublewave(notes, bpm, 2, amplitude, freq)
+                if case2(15):
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.wave(notes, bpm, 3, amplitude, freq)
+                if case2(16):
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.doublewave(notes, bpm, 3, amplitude, freq)
+                if case2(17):
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.wave(notes, bpm, 4, amplitude, freq)
+                if case2(18):
+                    amplitude, freq = getamplifreq()
+                    out = sbmods.scrolls.doublewave(notes, bpm, 4, amplitude, freq)
         if case(2):
             for case2 in switch(y):
                 if case2(0):
@@ -132,3 +156,10 @@ def callmod(x, y, notes, bpm):
                 if case2(0):
                     out = sbmods.base.createbase()
     return out
+
+
+def getamplifreq():
+    amplitude = float(raw_input("Enter the intensity of the wave: >>>")) * 25
+    freq = int(round(float(raw_input("Enter the frequency of the wave: >>>")), 1))
+
+    return amplitude, freq

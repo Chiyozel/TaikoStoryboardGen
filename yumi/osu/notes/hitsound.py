@@ -18,3 +18,9 @@ class Hitsound:
 
     def __repr__(self):
         return self.__str__()
+
+    def iskat(self):
+        return getbit(self.type, 1) or getbit(self.type, 3)
+
+    def isfinish(self):
+        return getbit(self.type, 2)

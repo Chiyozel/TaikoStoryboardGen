@@ -17,7 +17,7 @@ class StoryboardMods:
             if beginning > end:
                 end, beginning = beginning, end
             for n in self.notes:
-                if beginning < n.t < end:
+                if beginning <= n.t < end:
                     notes_sb = notes_sb + [n]
 
             self.scroll = float(raw_input("Scrolling speed of the SB mod: >>>"))
