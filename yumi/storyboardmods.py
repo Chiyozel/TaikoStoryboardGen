@@ -1,5 +1,5 @@
-import ModsTypes
-import Utils
+import modstypes
+from yumi import utils
 
 
 class StoryboardMods:
@@ -33,18 +33,18 @@ class StoryboardMods:
         print("What do you want to do?")
         n = 1
         choice = 0
-        for x in ModsTypes.ModTypes:
+        for x in modstypes.modtypes:
             print ("{}.\t{}".format(n, x))
             n += 1
 
-        while choice not in range(1, len(ModsTypes.ModTypes)+1):
+        while choice not in range(1, len(modstypes.modtypes)+1):
             choice = int(raw_input(">>>"))
 
-        modslist = ModsTypes.writeList(choice - 1)
+        modslist = modstypes.writelist(choice - 1)
 
         y = 0
         while y not in range(1, len(modslist)+1):
             y = int(raw_input(">>>"))
 
-        out = ModsTypes.callMod(choice - 1, y - 1, notessb, self.scroll)
-        Utils.writeFile(out)
+        out = modstypes.callmod(choice - 1, y - 1, notessb, self.scroll)
+        utils.writetofile(out)

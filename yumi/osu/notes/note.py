@@ -1,5 +1,5 @@
-from Hitsound import Hitsound
-from NoteType import NoteType
+from hitsound import Hitsound
+from notetype import NoteType
 
 
 class Note:

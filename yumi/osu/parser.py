@@ -1,5 +1,5 @@
-from Note import Note
-from NoteType import NoteType
+from yumi.osu.notes.note import Note
+from yumi.osu.notes.notetype import NoteType
 
 
 def istaiko(f):

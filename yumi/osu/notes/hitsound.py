@@ -1,4 +1,4 @@
-from Utils import getbit
+from yumi.utils import getbit
 
 
 class Hitsound:

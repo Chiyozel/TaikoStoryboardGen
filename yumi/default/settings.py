@@ -1,4 +1,4 @@
-TaikoStoryboard = {
+taikostoryboard = {
     "Receptor_X": 170,
     "Receptor_Y": 370,
     "ReversedReceptor_X": 470,
@@ -9,4 +9,4 @@ TaikoStoryboard = {
     "CounterCentreRight": 552,
     "CounterNumberSpacing": 20
 }
-BeatmapLocation = "./osuBeatmaps"
+beatmaplocation = "./osuBeatmaps"

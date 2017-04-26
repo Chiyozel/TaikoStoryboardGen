@@ -1,5 +1,6 @@
 import os
-from DefaultSettings import TaikoStoryboard
+
+from yumi.default.settings import taikostoryboard
 
 
 def getbit(x, k):
@@ -15,21 +16,21 @@ def promptmaps(listmaps):
     return int(raw_input(">>>"))
 
 
-def writeFile(out):
-    sb_location = findSetting("StoryboardLocation")
+def writetofile(out):
+    sb_location = findsetting("StoryboardLocation")
     f = open(sb_location, "a")
     f.write(out)
     f.write("\n")
     f.close()
 
 
-def findSetting(setting):
+def findsetting(setting):
     if os.path.isfile("./settings.ini"):
         settings_file = open("./settings.ini", "r")
         listsettings = {}
         for line in settings_file:
             key, value = line.strip('\n').split("=")
             listsettings[key] = value
-        return listsettings[setting] if setting in listsettings.keys() else TaikoStoryboard[setting]
+        return listsettings[setting] if setting in listsettings.keys() else taikostoryboard[setting]
     else:
-        return TaikoStoryboard[setting]
+        return taikostoryboard[setting]
