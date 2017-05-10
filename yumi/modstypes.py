@@ -1,5 +1,6 @@
 from switchcase import switch
 import sbmods
+from sbmods import tweentypes
 
 modtypes = [
     "Note counters...",
@@ -26,25 +27,28 @@ scrollingtypes = [
     "Upside Down",
     "Boost",
     "Four Star",
-    "Sine Wave",
-    "Double Sine Wave",
-    "Inverted Sine Wave",
-    "Double Invert Sine Wave",
-    "Triangle Wave",
-    "Double Triangle Wave",
+    "Vertical Wave",
+    "Double V. Wave",
+    "Horizontal Wave",
+    "Spiral Scroll",
+    "Upside Down + Reversed"
 ]
 
 notealterations = [
     "Abekobe",
     "Confusion",
-    "Flashlight II"
+    "Flashlight II (Only colors)",
+    "Not Abekobe",
+    "Hidden",
+    "Hidden II (Only colors)",
 ]
 
 hybrids = [
     "Reversed Abekobe",
     "Upside down Abekobe",
-    "Confusion Wave I",
-    "Confusion Double Wave I"
+    "Confusion Vertical Wave",
+    "Confusion V. Double Wave",
+    "Confusion Horizontal Wave"
 ]
 
 sbbase = [
@@ -88,7 +92,7 @@ def callmod(x, y, notes, bpm):
                 if case2(0):
                     out = sbmods.scrolls.doublescroll(notes, bpm)
                 if case2(1):
-                    out = sbmods.scrolls.brake(notes, bpm)
+                    out = sbmods.scrolls.scrolltween(notes, bpm, 1)
                 if case2(2):
                     out = sbmods.scrolls.reverse(notes, bpm)
                 if case2(3):
@@ -100,47 +104,40 @@ def callmod(x, y, notes, bpm):
                 if case2(6):
                     out = sbmods.scrolls.upsidedown(notes, bpm)
                 if case2(7):
-                    out = sbmods.scrolls.boost(notes, bpm)
+                    out = sbmods.scrolls.scrolltween(notes, bpm, 2)
                 if case2(8):
                     out = sbmods.scrolls.star(notes, bpm)
                 if case2(9):
                     amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.wave(notes, bpm, 0, amplitude, freq)
+                    tweentype = getwavetween()
+                    out = sbmods.scrolls.wave(notes, bpm, tweentype, amplitude, freq)
                 if case2(10):
                     amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.doublewave(notes, bpm, 0, amplitude, freq)
+                    tweentype = getwavetween()
+                    out = sbmods.scrolls.doublewave(notes, bpm, tweentype, amplitude, freq)
                 if case2(11):
-                    amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.wave(notes, bpm, 1, amplitude, freq)
+                    freq = getfreq()
+                    tweentype = gethwavetween()
+                    out = sbmods.scrolls.horizwave(notes, bpm, tweentype, freq)
                 if case2(12):
-                    amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.doublewave(notes, bpm, 1, amplitude, freq)
+                    degoffset = getdegoffset()
+                    out = sbmods.scrolls.spiral(notes, bpm, degoffset)
                 if case2(13):
-                    amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.wave(notes, bpm, 2, amplitude, freq)
-                if case2(14):
-                    amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.doublewave(notes, bpm, 2, amplitude, freq)
-                if case2(15):
-                    amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.wave(notes, bpm, 3, amplitude, freq)
-                if case2(16):
-                    amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.doublewave(notes, bpm, 3, amplitude, freq)
-                if case2(17):
-                    amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.wave(notes, bpm, 4, amplitude, freq)
-                if case2(18):
-                    amplitude, freq = getamplifreq()
-                    out = sbmods.scrolls.doublewave(notes, bpm, 4, amplitude, freq)
+                    out = sbmods.scrolls.upsidedownrev(notes, bpm)
         if case(2):
             for case2 in switch(y):
                 if case2(0):
-                    out = sbmods.transformations.abekobe(notes)
+                    out = sbmods.transformations.abekobe(notes, bpm)
                 if case2(1):
-                    out = sbmods.transformations.confusion(notes)
+                    out = sbmods.transformations.confusion(notes, bpm)
                 if case2(2):
-                    out = sbmods.transformations.flashlight(notes)
+                    out = sbmods.transformations.flashlight(notes, bpm)
+                if case2(3):
+                    out = sbmods.transformations.abekoreset(notes, bpm)
+                if case2(4):
+                    out = sbmods.transformations.hidden(notes, bpm)
+                if case2(5):
+                    out = sbmods.transformations.hidden2(notes, bpm)
         if case(3):
             for case2 in switch(y):
                 if case2(0):
@@ -148,9 +145,17 @@ def callmod(x, y, notes, bpm):
                 if case2(1):
                     out = sbmods.hybrids.upsidedownabekobe(notes, bpm)
                 if case2(2):
-                    out = sbmods.hybrids.waveconfusion(notes, bpm)
+                    amplitude, freq = getamplifreq()
+                    tweentype = getwavetween()
+                    out = sbmods.hybrids.waveconfusion(notes, bpm, tweentype, amplitude, freq)
                 if case2(3):
-                    out = sbmods.hybrids.doublewaveconfusion(notes, bpm)
+                    amplitude, freq = getamplifreq()
+                    tweentype = getwavetween()
+                    out = sbmods.hybrids.doublewaveconfusion(notes, bpm, tweentype, amplitude, freq)
+                if case2(4):
+                    freq = getfreq()
+                    tweentype = gethwavetween()
+                    out = sbmods.hybrids.hwaveconfusion(notes, bpm, tweentype, freq)
         if case(4):
             for case2 in switch(y):
                 if case2(0):
@@ -163,3 +168,55 @@ def getamplifreq():
     freq = int(round(float(raw_input("Enter the frequency of the wave: >>>")), 1))
 
     return amplitude, freq
+
+
+def getfreq():
+    freq = int(round(float(raw_input("Enter the frequency of the wave: >>>")), 1))
+
+    return freq
+
+
+def getwavetween():
+    for i in range(0, len(tweentypes.vwave)):
+        print("{}.\t{}".format(i, tweennumber(tweentypes.vwave[i])))
+    tween = int(raw_input("Enter your tween type: >>>"))
+    if tween > len(tweentypes.vwave):
+        tween = 0
+    return tween
+
+
+def getdegoffset():
+    angle = int(raw_input("Enter your angle offset (in deg) >>>"))
+    if angle >= 360:
+        angle %= 360
+    return angle
+
+
+def gethwavetween():
+    for i in range(0, len(tweentypes.hwave)):
+        print("{}.\t{}".format(i, tweennumber(tweentypes.hwave[i])))
+    tween = int(raw_input("Enter your tween type: >>>"))
+    if tween > len(tweentypes.hwave):
+        tween = 0
+    return tween
+
+
+def tweennumber(n):
+    out = ""
+    for i in range(0, len(n)):
+        if i < len(n) - 1:
+            out += "{} - ".format(j(n[i]))
+        else:
+            out += "{}".format(j(n[i]))
+    return out
+
+
+def j(n):
+    if n == 0:
+        return "Linear"
+    elif n == 1:
+        return "Decelerate"
+    elif n == 2:
+        return "Accelerate"
+    else:
+        return "Unsupported"

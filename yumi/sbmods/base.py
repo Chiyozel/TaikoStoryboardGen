@@ -9,22 +9,6 @@ def createbase():
     out += " F,0,0,500000,1\n"
     out += " M,0,0,500000,320,{}\n".format(findsetting("Receptor_Y"))
 
-    # Four Star Black Bars (Hidden by default)
-    out += "Sprite,Background,Centre,\"SB/black_bar.png\",320,240\n"
-    out += " R,0,0,500000,0.7853982\n"
-    out += " F,0,0,500000,0\n"
-    out += " M,0,0,500000,320,390\n"
-
-    out += "Sprite,Background,Centre,\"SB/black_bar.png\",320,240\n"
-    out += " R,0,0,500000,-0.7853982\n"
-    out += " F,0,0,500000,0\n"
-    out += " M,0,0,500000,320,390\n"
-
-    out += "Sprite,Background,Centre,\"SB/black_bar.png\",320,240\n"
-    out += " R,0,0,500000,1.570796\n"
-    out += " F,0,0,500000,0\n"
-    out += " M,0,0,500000,320,390\n"
-
     # Receptor
     out += "Sprite,Foreground,Centre,\"SB/point.png\",320,240\n"
     out += " S,0,0,500000,0.4\n"
