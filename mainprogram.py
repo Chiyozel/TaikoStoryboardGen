@@ -1,6 +1,6 @@
 """
 Taiko Storyboard Generator & Beatmap Modifier
-by Unmei Muma (https://osu.ppy.sh/u/481582)
+Made with love by Unmei Muma (https://osu.ppy.sh/u/481582)
 Pls no slap for python 2.7 </3
 """
 
@@ -25,7 +25,7 @@ if not (os.path.isdir(beatmapdirectory) and os.path.isfile("./settings.ini")):
     # If the directory is not here well just create it
     if directory:
         os.mkdir(beatmapdirectory)
-        print("osuBeatmaps directory created.")
+        print("osu! beatmaps directory created. Put osu!taiko beatmaps (.osu) in the folder.")
 
     # Same for settings
     if settings:
@@ -47,7 +47,7 @@ filelist = [f for f in os.listdir(beatmapdirectory)
 
 # Time to prompt the user to use 1 beatmap if there are more than one. If there are none, tell them to add some.
 if filelist.__len__() == 0:
-    print("There are no available beatmaps. Please add some before using this program.")
+    print("There are no available osu!taiko beatmaps. Please add some before using this program.")
     time.sleep(5)
     sys.exit()
 

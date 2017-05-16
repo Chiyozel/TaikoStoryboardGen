@@ -10,8 +10,9 @@ class StoryboardMods:
 
     def dostoryboard(self):
         confirmation = None
-        notes_sb = []
+        notes_sb = None
         while confirmation != "y":
+            notes_sb = []
             beginning = int(raw_input("Beginning of the SB mod: >>>"))
             end = int(raw_input("End of the SB mod: >>>"))
             if beginning > end:
@@ -37,14 +38,17 @@ class StoryboardMods:
             print ("{}.\t{}".format(n, x))
             n += 1
 
-        while choice not in range(1, len(modstypes.modtypes)+1):
+        while choice not in range(1, len(modstypes.modtypes) + 1):
             choice = int(raw_input(">>>"))
 
         modslist = modstypes.writelist(choice - 1)
 
         y = 0
-        while y not in range(1, len(modslist)+1):
+        while y not in range(1, len(modslist) + 1):
             y = int(raw_input(">>>"))
 
         out = modstypes.callmod(choice - 1, y - 1, notessb, self.scroll)
         utils.writetofile(out)
+        continue_sb = raw_input("Do you want to continue? 'y' to continue, other to quit.")
+        if continue_sb == 'y':
+            self.dostoryboard()
