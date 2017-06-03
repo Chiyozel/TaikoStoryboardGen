@@ -12,7 +12,10 @@ def promptmaps(listmaps):
     for beatmap in listmaps:
         print("{}.\t{}".format(x, os.path.splitext(beatmap)[0]))
         x += 1
-    return int(raw_input(">>>"))
+    r_str = ""
+    while not r_str.isdigit():
+        r_str = raw_input(">>>")
+    return int(r_str)
 
 
 def writetofile(out):
@@ -33,3 +36,11 @@ def findsetting(setting):
         return listsettings[setting] if setting in listsettings.keys() else taikostoryboard[setting]
     else:
         return taikostoryboard[setting]
+
+
+def isfloat(s):
+    try:
+        float(s)
+    except ValueError:
+        return False
+    return True
