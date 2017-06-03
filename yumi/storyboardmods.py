@@ -40,14 +40,23 @@ class StoryboardMods:
 
         while choice not in range(1, len(modstypes.modtypes) + 1):
             choice = int(raw_input(">>>"))
+        if choice != 3:
+            modslist = modstypes.writelist(choice - 1)
+            y = 0
+            while y not in range(1, len(modslist) + 1):
+                y = int(raw_input(">>>"))
 
-        modslist = modstypes.writelist(choice - 1)
+            if choice == 2:
+                mods2list = modstypes.writelist(2)
+                z = 0
+                while z not in range(1, len(mods2list) + 1):
+                    z = int(raw_input(">>>"))
+            else:
+                z = 0
+        else:
+            y = z = 0
 
-        y = 0
-        while y not in range(1, len(modslist) + 1):
-            y = int(raw_input(">>>"))
-
-        out = modstypes.callmod(choice - 1, y - 1, notessb, self.scroll)
+        out = modstypes.callmod2(choice - 1, y - 1, z - 1, notessb, self.scroll)
         utils.writetofile(out)
         continue_sb = raw_input("Do you want to continue? 'y' to continue, other to quit.")
         if continue_sb == 'y':

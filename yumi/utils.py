@@ -1,5 +1,4 @@
 import os
-
 from yumi.default.settings import taikostoryboard
 
 
