@@ -5,6 +5,7 @@ Storyboard Scroll Types
 import math
 
 from yumi.utils import findsetting
+from yumi.utils import isfloat
 from yumi.osu.notes.notetype import NoteType
 from yumi.osu.notes.hitsound import Hitsound
 from yumi.sbmods.tweentypes import hwave as wavetweens
@@ -327,7 +328,11 @@ def split(notes, bpm, z):
 
 
 def normal(notes, bpm, z):
-    speed = max(float(raw_input("Scroll speed multiplier: >>>")), 0.01)
+    speed_str = ""
+    print "Scroll speed multiplier:"
+    while not isfloat(speed_str):
+        speed_str = raw_input(">>>")
+    speed = max(float(speed_str), 0.01)
     notecount = len(notes)
     notes2 = list(reversed(notes))
     out = ""
@@ -873,7 +878,7 @@ def compound(notes, bpm, h_wave_type, v_wave_type, amplitude, freq, z):
             out += " S,0,{},,0.35\n".format(n.t)
 
         # Note coloring rules
-            out += n_trans(n, z, n_in, False)
+        out += n_trans(n, z, n_in, False)
 
         # I don't need to explain it once again, the rules are described above. Overlay rules are the same.
         if n_hs.isfinish():

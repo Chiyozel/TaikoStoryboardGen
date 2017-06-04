@@ -1,4 +1,5 @@
 from switchcase import switch
+from yumi.utils import isfloat
 import sbmods
 from sbmods import tweentypes
 
@@ -148,58 +149,94 @@ def callmod2(x, y, z, notes, bpm):
 
 
 def getamplifreq():
-    amplitude = float(raw_input("Enter the intensity: >>>")) * 25
-    freq = int(round(float(raw_input("Enter the frequency: >>>")), 1))
+    a_str = f_str = ""
+
+    while not (isfloat(a_str) and f_str.isdigit()):
+        a_str = raw_input("Enter the intensity: >>>")
+        f_str = raw_input("Enter the frequency (Integer only): >>>")
+
+    amplitude = float(a_str) * 25
+    freq = int(f_str)
 
     return amplitude, freq
 
 
 def getdonkatangle():
-    d_angle = float(raw_input("Enter the Don scroll angle: >>>"))
-    k_angle = float(raw_input("Enter the Kat scroll angle: >>>"))
+    da_str = ka_str = ""
+
+    while not (isfloat(da_str) and isfloat(da_str)):
+        da_str = raw_input("Enter the Don scroll angle: >>>")
+        ka_str = raw_input("Enter the Kat scroll angle: >>>")
+
+    d_angle = float(da_str)
+    k_angle = float(ka_str)
 
     return d_angle, k_angle
 
 
 def getfreq():
-    freq = int(round(float(raw_input("Enter the frequency: >>>")), 1))
+    frq_str = ""
+    print "Enter the frequency (Integer only):"
+    while not frq_str.isdigit():
+        frq_str = raw_input(">>>")
+    freq = int(frq_str)
 
     return freq
 
 
 def getffreq():
-    freq = float(round(float(raw_input("Enter the frequency: >>>")), 1))
+    frq_str = ""
+    print "Enter the frequency (Decimal allowed):"
+    while not isfloat(frq_str):
+        frq_str = raw_input(">>>")
+    freq = float(frq_str)
 
     return freq
 
 
 def getwavetween():
+    tween_str = ""
     for i in range(0, len(tweentypes.vwave)):
         print("{}.\t{}".format(i, tweennumber(tweentypes.vwave[i])))
-    tween = int(raw_input("Enter your tween type: >>>"))
+    print "Enter your tween type:"
+    while not tween_str.isdigit():
+        tween_str = raw_input(">>>")
+    tween = int(tween_str)
     if tween > len(tweentypes.vwave):
         tween = 0
     return tween
 
 
 def getdegoffset():
-    angle = int(raw_input("Enter your angle offset (in deg) >>>"))
+    ang_str = ""
+    print "Enter your angle offset (in deg):"
+    while not ang_str.isdigit():
+        ang_str = raw_input(">>>")
+    angle = int(ang_str)
     if angle >= 360:
         angle %= 360
     return angle
 
 
 def getcone():
-    angle = int(raw_input("Enter your cone angle (in deg) >>>"))
+    ang_str = ""
+    print "Enter your cone angle (in deg):"
+    while not ang_str.isdigit():
+        ang_str = raw_input(">>>")
+    angle = int(ang_str)
     if angle >= 360:
         angle %= 360
     return angle
 
 
 def gethwavetween():
+    tween_str = ""
     for i in range(0, len(tweentypes.hwave)):
         print("{}.\t{}".format(i, tweennumber(tweentypes.hwave[i])))
-    tween = int(raw_input("Enter your tween type: >>>"))
+    print "Enter your tweening method:"
+    while not tween_str.isdigit():
+        tween_str = raw_input(">>>")
+    tween = int(tween_str)
     if tween > len(tweentypes.hwave):
         tween = 0
     return tween
