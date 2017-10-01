@@ -1,9 +1,10 @@
-from yumi.utils import findsetting
+from yumi.utils import findsetting, isfloat
 
 
 def leftcounter(notes):
     out = ""
     num_centre = int(findsetting("CounterCentreLeft"))
+    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
     num_spacing = int(findsetting("CounterNumberSpacing"))
     notecount = len(notes)
     strnc = str(notecount)
@@ -13,11 +14,13 @@ def leftcounter(notes):
     for z in range(ln, 0, -1):
         n_placement = float(z * 2 - ln - 1) / 2
         x_pos = num_centre - (n_placement * num_spacing)
-        out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(strnc[-z])
+        out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+            "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", strnc[-z])
         out += " M,0,{0},{1},{2},{3}\n".format(notes2[-1].t,
                                                notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t, int(x_pos),
                                                findsetting("Receptor_Y"))
-        out += " S,0,{0},{1},0.5\n".format(notes2[-1].t, notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t)
+        out += " S,0,{0},{1},{2}\n".format(notes2[-1].t, notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t,
+                                           0.5 * scale)
 
     for i in range(notecount - 1, 0, -1):
         nnext = notes2[i]
@@ -27,15 +30,17 @@ def leftcounter(notes):
             n_placement = float(z * 2 - lc - 1) / 2
             x_pos = num_centre - (n_placement * num_spacing)
             if z == 1:
-                out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(str(i)[-z])
+                out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+                    "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 1].t, int(x_pos),
                                                        findsetting("Receptor_Y"))
-                out += " S,0,{0},{1},0.5\n".format(nnext.t, notes2[i - 1].t)
+                out += " S,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 1].t, 0.5 * scale)
             if ((i + 1) % 10 ** (z - 1)) == 0 and z > 1:
-                out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(str(i)[-z])
+                out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+                    "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, int(x_pos),
                                                        findsetting("Receptor_Y"))
-                out += " S,0,{0},{1},0.5\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t)
+                out += " S,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, 0.5 * scale)
 
     return out
 
@@ -43,6 +48,7 @@ def leftcounter(notes):
 # This one contains all the comments for all four counter methods. They're the same except for one or two details.
 def rightcounter(notes):
     out = ""
+    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
 
     # Get settings for the center of the counter as well as spacing
     num_centre = int(findsetting("CounterCentreRight"))
@@ -63,11 +69,13 @@ def rightcounter(notes):
         x_pos = num_centre - (n_placement * num_spacing)
 
         # Places every digit relative to its position in the number.
-        out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(strnc[-z])
+        out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+            "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", strnc[-z])
         out += " M,0,{0},{1},{2},{3}\n".format(notes2[-1].t,
                                                notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t, int(x_pos),
                                                findsetting("Receptor_Y"))
-        out += " S,0,{0},{1},0.5\n".format(notes2[-1].t, notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t)
+        out += " S,0,{0},{1},{2}\n".format(notes2[-1].t, notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t,
+                                           0.5 * scale)
 
     # Counts down.
     for i in range(notecount - 1, 0, -1):
@@ -81,24 +89,27 @@ def rightcounter(notes):
 
             # Needed to avoid duplicate unit digits.
             if z == 1:
-                out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(str(i)[-z])
+                out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+                    "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 1].t, int(x_pos),
                                                        findsetting("Receptor_Y"))
-                out += " S,0,{0},{1},0.5\n".format(nnext.t, notes2[i - 1].t)
+                out += " S,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 1].t, 0.5 * scale)
 
             # Each time another digit goes down with your current note, make sure the change happens only once
             # for 10^n, where n is the nth LSD of the number.
             if ((i + 1) % 10 ** (z - 1)) == 0 and z > 1:
-                out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(str(i)[-z])
+                out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+                    "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, int(x_pos),
                                                        findsetting("Receptor_Y"))
-                out += " S,0,{0},{1},0.5\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t)
+                out += " S,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, 0.5 * scale)
 
     return out
 
 
 def rightcountermirror(notes):
     out = ""
+    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
     num_centre = int(findsetting("CounterCentreRight"))
     num_spacing = int(findsetting("CounterNumberSpacing"))
     notecount = len(notes)
@@ -109,12 +120,15 @@ def rightcountermirror(notes):
     for z in range(ln, 0, -1):
         n_placement = float(z * 2 - ln - 1) / -2
         x_pos = num_centre - (n_placement * num_spacing)
-        out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(strnc[-z])
+        out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+            "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", strnc[-z])
         out += " M,0,{0},{1},{2},{3}\n".format(notes2[-1].t,
                                                notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t, int(x_pos),
                                                findsetting("Receptor_Y"))
-        out += " V,0,{0},{1},-0.5,0.5\n".format(notes2[-1].t,
-                                                notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t)
+        out += " S,0,{0},{1},{2}\n".format(notes2[-1].t,
+                                           notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t, 0.5 * scale)
+        out += " P,0,{0},{1},H\n".format(notes2[-1].t,
+                                         notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t)
 
     for i in range(notecount - 1, 0, -1):
         nnext = notes2[i]
@@ -124,15 +138,19 @@ def rightcountermirror(notes):
             n_placement = float(z * 2 - lc - 1) / -2
             x_pos = num_centre - (n_placement * num_spacing)
             if z == 1:
-                out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(str(i)[-z])
+                out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+                    "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 1].t, int(x_pos),
                                                        findsetting("Receptor_Y"))
-                out += " V,0,{0},{1},-0.5,0.5\n".format(nnext.t, notes2[i - 1].t)
+                out += " S,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 1].t, 0.5 * scale)
+                out += " P,0,{0},{1},H\n".format(nnext.t, notes2[i - 1].t)
             if ((i + 1) % 10 ** (z - 1)) == 0 and z > 1:
-                out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(str(i)[-z])
+                out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+                    "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, int(x_pos),
                                                        findsetting("Receptor_Y"))
-                out += " V,0,{0},{1},-0.5,0.5\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t)
+                out += " S,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, 0.5 * scale)
+                out += " P,0,{0},{1},H\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t)
 
     return out
 
@@ -140,6 +158,7 @@ def rightcountermirror(notes):
 def leftcounterupside(notes):
     out = ""
     num_centre = int(findsetting("CounterCentreRight"))
+    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
     num_spacing = int(findsetting("CounterNumberSpacing"))
     notecount = len(notes)
     strnc = str(notecount)
@@ -149,12 +168,16 @@ def leftcounterupside(notes):
     for z in range(ln, 0, -1):
         n_placement = float(z * 2 - ln - 1) / -2
         x_pos = num_centre - (n_placement * num_spacing)
-        out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(strnc[-z])
+        out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+            "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", strnc[-z])
         out += " M,0,{0},{1},{2},{3}\n".format(notes2[-1].t,
                                                notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t, int(x_pos),
                                                findsetting("UpsideDownReceptor_Y"))
-        out += " V,0,{0},{1},0.5,-0.5\n".format(notes2[-1].t,
-                                                notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t)
+        out += " V,0,{0},{1},{2}\n".format(notes2[-1].t,
+                                           notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t, 0.5 * scale)
+
+        out += " P,0,{0},{1},V\n".format(notes2[-1].t,
+                                         notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t)
 
     for i in range(notecount - 1, 0, -1):
         nnext = notes2[i]
@@ -164,14 +187,18 @@ def leftcounterupside(notes):
             n_placement = float(z * 2 - lc - 1) / -2
             x_pos = num_centre - (n_placement * num_spacing)
             if z == 1:
-                out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(str(i)[-z])
+                out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+                    "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 1].t, int(x_pos),
                                                        findsetting("UpsideDownReceptor_Y"))
-                out += " V,0,{0},{1},0.5,-0.5\n".format(nnext.t, notes2[i - 1].t)
+                out += " S,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 1].t, 0.5 * scale)
+                out += " P,0,{0},{1},V\n".format(nnext.t, notes2[i - 1].t)
             if ((i + 1) % 10 ** (z - 1)) == 0 and z > 1:
-                out += "Sprite,Foreground,Centre,\"SB/numbers/val_{}.png\",320,240\n".format(str(i)[-z])
+                out += "Sprite,Foreground,Centre,\"{}{}.png\",320,240\n".format(
+                    "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, int(x_pos),
                                                        findsetting("UpsideDownReceptor_Y"))
-                out += " V,0,{0},{1},0.5,-0.5\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t)
+                out += " V,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, 0.5 * scale)
+                out += " P,0,{0},{1},V\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t)
 
     return out

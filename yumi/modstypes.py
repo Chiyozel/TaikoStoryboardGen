@@ -34,7 +34,10 @@ scrollingtypes = [
     "Vertical Bounce",
     "Compound Scroll",
     "Cone",
-    "TanZ (Hidden not applicable)"
+    "TanZ (Hidden not applicable)",
+    "Clock (Experimental as Rox sucks at making Taiko mods)",
+    "Receptor Wave",
+    "Angled Scroll",
 ]
 
 notealterations = [
@@ -45,6 +48,7 @@ notealterations = [
     "Not Abekobe",
     "Hidden",
     "Hidden II (Only colors)",
+    "Monochrome (tasuke912)",
 ]
 
 
@@ -133,6 +137,13 @@ def note_mods(y, z, notes, bpm):
         if case2(17):
             freq = getfreq()
             out = sbmods.allmods.tanz(notes, bpm, freq, z)
+        if case2(18):
+            out = sbmods.allmods.clock(notes, bpm, z)
+        if case2(19):
+            out = sbmods.allmods.wave2(notes, bpm, z)
+        if case2(20):
+            angle = getangle()
+            out = sbmods.allmods.anglescroll(notes, bpm, angle, z)
     return out
 
 
@@ -172,6 +183,17 @@ def getdonkatangle():
     k_angle = float(ka_str)
 
     return d_angle, k_angle
+
+
+def getangle():
+    a_str = ""
+
+    while not isfloat(a_str):
+        a_str = raw_input("Enter the Scroll angle: >>>")
+
+    angle = float(a_str)
+
+    return angle
 
 
 def getfreq():

@@ -8,6 +8,9 @@ taikostoryboard = {
     "StoryboardLocation": "./Storyboard.txt",
     "CounterCentreLeft": 80,
     "CounterCentreRight": 552,
-    "CounterNumberSpacing": 20
+    "CounterNumberSpacing": 20,
+    "UseSkinElements": False,
+    "ScaleFactor": 1,
+    "SplitReceptorX": 320,
 }
 beatmaplocation = "./osuBeatmaps"
