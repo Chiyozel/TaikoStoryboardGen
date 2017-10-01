@@ -48,7 +48,7 @@ well as its scrolling speed (BPM x SV Greenline, or anything you wish).
    - **Note counters**: Displays the amount of remaining notes before
    the end of the mod section.
    - **Note alteration & scrolling types**: The core for mods. Every mod
-   will be explained in the wiki with a video illustration
+   will be explained in the [wiki](https://github.com/Chiyozel/TaikoStoryboardGen/wiki) with a video illustration
    - **Create SB base**: Simply create a storyboard base with your
    current settings.
 3. (Only if you chose 2) Choose your scrolling type as well as the
