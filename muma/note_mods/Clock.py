@@ -1,7 +1,7 @@
 import math
 
 import muma.note_mods.sbUtils
-from muma.note_mods.Base import BasicMod
+from muma.note_mods import BasicMod
 from muma.sbmods.transformations import note_transform as n_trans
 from muma.utils import findsetting, isfloat
 

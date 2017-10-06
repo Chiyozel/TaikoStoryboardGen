@@ -87,12 +87,12 @@ def note_mods(y, z, notes, bpm):
     out = ""
     for case2 in switch(y):
         if case2(0):
-            normal = mods.ScrollTween.ScrollTween(notes, bpm, z)
+            normal = mods.ScrollTween(notes, bpm, z)
             out = normal.make_sb()
 
         if case2(1):
             tween = getwavetween(1)[0]
-            tweenscroll = mods.ScrollTween.ScrollTween(notes, bpm, z, tween)
+            tweenscroll = mods.ScrollTween(notes, bpm, z, tween)
             out = tweenscroll.make_sb()
 
         if case2(2):
@@ -103,20 +103,20 @@ def note_mods(y, z, notes, bpm):
         if case2(4):
             pass
         if case2(5):
-            split = mods.Split.Split(notes, bpm, z)
+            split = mods.Split(notes, bpm, z)
             out = split.make_sb()
         if case2(6):
             pass
         if case2(7):
             out = sbmods.allmods.star(notes, bpm, z)
         if case2(8):
-            amplitude, freq = getamplifreq()
-            arr_tween = getwavetween(3)
-            out = sbmods.allmods.wave(notes, bpm, amplitude, freq, z, arr_tween)
+            wave = mods.VerticalWave(notes, bpm, z)
+            out = wave.make_sb()
+
         if case2(9):
-            amplitude, freq = getamplifreq()
-            tweentype = getwavetween(3)
-            out = sbmods.allmods.doublewave(notes, bpm, tweentype, amplitude, freq, z)
+            dwave = mods.DoubleWave(notes, bpm, z)
+            out = dwave.make_sb()
+
         if case2(10):
             freq = getfreq()
             tweentype = getwavetween(2)
@@ -127,7 +127,7 @@ def note_mods(y, z, notes, bpm):
         if case2(12):
             pass
         if case2(13):
-            bounce = mods.Bounce.Bounce(notes, bpm, z)
+            bounce = mods.Bounce(notes, bpm, z)
             out = bounce.make_sb()
 
         if case2(14):
@@ -145,7 +145,7 @@ def note_mods(y, z, notes, bpm):
             freq = getfreq()
             out = sbmods.allmods.tanz(notes, bpm, freq, z)
         if case2(17):
-            clock = mods.Clock.Clock(notes, bpm, z)
+            clock = mods.Clock(notes, bpm, z)
             out = clock.make_sb()
 
         if case2(18):
@@ -263,24 +263,3 @@ def getcone():
     if angle >= 360:
         angle %= 360
     return angle
-
-
-def tweennumber(n):
-    out = ""
-    for i in range(0, len(n)):
-        if i < len(n) - 1:
-            out += "{} - ".format(j(n[i]))
-        else:
-            out += "{}".format(j(n[i]))
-    return out
-
-
-def j(n):
-    if n == 0:
-        return "Linear"
-    elif n == 1:
-        return "Decelerate"
-    elif n == 2:
-        return "Accelerate"
-    else:
-        return "Unsupported"
