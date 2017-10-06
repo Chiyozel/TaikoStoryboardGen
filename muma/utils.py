@@ -1,5 +1,5 @@
 import os
-from yumi.default.settings import taikostoryboard
+from muma.default.settings import taikostoryboard
 
 
 def getbit(x, k):

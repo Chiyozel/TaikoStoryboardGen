@@ -1,10 +1,10 @@
-from switchcase import switch
-from yumi.osu.notes.notetype import NoteType
-from yumi.osu.notes.hitsound import Hitsound
 import random
 
+from muma.osu.notes import NoteType, Hitsound
+from switchcase import switch
 
-def note_transform(n, transform_type, n_in, overlay):
+
+def note_transform(n, transform_type, n_in, overlay=False):
     out = ""
     n_x = n.t - n_in
     n_type = NoteType(n.note_type)

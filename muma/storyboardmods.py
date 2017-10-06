@@ -1,5 +1,5 @@
 import modstypes
-from yumi import utils
+from muma import utils
 import sys
 
 
@@ -52,39 +52,45 @@ class StoryboardMods:
         print("What do you want to do? - 'q' to exit")
         n = 1
 
-        choice_str = y_str = z_str = ""
-        choice = y = z = 0
-
         for x in modstypes.modtypes:
             print ("{}.\t{}".format(n, x))
             n += 1
 
-        while choice not in range(1, len(modstypes.modtypes) + 1):
-            while not choice_str.isdigit():
+        while True:
+            while True:
                 choice_str = raw_input(">>>")
-                if choice_str.lower() == 'q':
+                if choice_str.lower() == "q":
                     sys.exit()
-            choice = int(choice_str)
+                elif choice_str.isdigit():
+                    choice = int(choice_str)
+                    break
+            if 1 <= choice <= len(modstypes.modtypes):
+                break
 
         if choice != 3:
             modslist = modstypes.writelist(choice - 1)
-            y = 0
-            while y not in range(1, len(modslist) + 1):
-                while not y_str.isdigit():
+            while True:
+                while True:
                     y_str = raw_input(">>>")
-                    if y_str.lower() == 'q':
+                    if y_str.lower() == "q":
                         sys.exit()
-                y = int(y_str)
-
+                    elif y_str.isdigit():
+                        y = int(y_str)
+                        break
+                if 1 <= y <= len(modslist):
+                    break
             if choice == 2:
                 mods2list = modstypes.writelist(2)
-                z = 0
-                while z not in range(1, len(mods2list) + 1):
-                    while not z_str.isdigit():
+                while True:
+                    while True:
                         z_str = raw_input(">>>")
                         if z_str.lower() == 'q':
                             sys.exit()
-                    z = int(z_str)
+                        elif z_str.isdigit():
+                            z = int(z_str)
+                            break
+                    if 1 <= z <= len(mods2list):
+                        break
 
         out = modstypes.callmod2(choice - 1, y - 1, z - 1, notessb, self.scroll)
 

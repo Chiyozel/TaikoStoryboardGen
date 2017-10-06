@@ -1,11 +1,11 @@
-from yumi.utils import findsetting, isfloat
+from muma.utils import findsetting, isfloat
 
 
 def leftcounter(notes):
     out = ""
     num_centre = int(findsetting("CounterCentreLeft"))
     scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-    num_spacing = int(findsetting("CounterNumberSpacing"))
+    num_spacing = int(findsetting("CounterNumberSpacing")) * scale
     notecount = len(notes)
     strnc = str(notecount)
     notes2 = list(reversed(notes))
@@ -52,7 +52,7 @@ def rightcounter(notes):
 
     # Get settings for the center of the counter as well as spacing
     num_centre = int(findsetting("CounterCentreRight"))
-    num_spacing = int(findsetting("CounterNumberSpacing"))
+    num_spacing = int(findsetting("CounterNumberSpacing")) * scale
 
     # Counting down and transforming to string
     notecount = len(notes)
@@ -111,7 +111,7 @@ def rightcountermirror(notes):
     out = ""
     scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
     num_centre = int(findsetting("CounterCentreRight"))
-    num_spacing = int(findsetting("CounterNumberSpacing"))
+    num_spacing = int(findsetting("CounterNumberSpacing")) * scale
     notecount = len(notes)
     strnc = str(notecount)
     notes2 = list(reversed(notes))
@@ -155,11 +155,11 @@ def rightcountermirror(notes):
     return out
 
 
-def leftcounterupside(notes):
+def upsidemirrorright(notes):
     out = ""
     num_centre = int(findsetting("CounterCentreRight"))
     scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-    num_spacing = int(findsetting("CounterNumberSpacing"))
+    num_spacing = int(findsetting("CounterNumberSpacing")) * scale
     notecount = len(notes)
     strnc = str(notecount)
     notes2 = list(reversed(notes))
@@ -173,7 +173,7 @@ def leftcounterupside(notes):
         out += " M,0,{0},{1},{2},{3}\n".format(notes2[-1].t,
                                                notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t, int(x_pos),
                                                findsetting("UpsideDownReceptor_Y"))
-        out += " V,0,{0},{1},{2}\n".format(notes2[-1].t,
+        out += " S,0,{0},{1},{2}\n".format(notes2[-1].t,
                                            notes2[len(notes2) - notecount % (10 ** (z - 1)) - 1].t, 0.5 * scale)
 
         out += " P,0,{0},{1},V\n".format(notes2[-1].t,
@@ -198,7 +198,7 @@ def leftcounterupside(notes):
                     "score-" if findsetting("UseSkinElements") else "SB/numbers/val_", str(i)[-z])
                 out += " M,0,{0},{1},{2},{3}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, int(x_pos),
                                                        findsetting("UpsideDownReceptor_Y"))
-                out += " V,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, 0.5 * scale)
+                out += " S,0,{0},{1},{2}\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t, 0.5 * scale)
                 out += " P,0,{0},{1},V\n".format(nnext.t, notes2[i - 10 ** (z - 1)].t)
 
     return out

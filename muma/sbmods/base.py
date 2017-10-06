@@ -1,4 +1,4 @@
-from yumi.utils import findsetting, isfloat
+from muma.utils import findsetting, isfloat
 
 
 def createbase():

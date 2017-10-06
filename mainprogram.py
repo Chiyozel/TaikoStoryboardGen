@@ -2,6 +2,7 @@
 Taiko Storyboard Generator & Beatmap Modifier
 Made with love by Unmei Muma (https://osu.ppy.sh/u/481582)
 Pls no slap for python 2.7 </3
+Python 3.x soon(tm)
 """
 
 # Imports
@@ -9,11 +10,11 @@ import os
 import sys
 import time
 
-from yumi.default.settings import taikostoryboard as taikosettings, beatmaplocation as beatmapdirectory
-from yumi.osu import parser
-from yumi.osu.parser import listnotes as listnotes
-from yumi.storyboardmods import StoryboardMods
-from yumi.utils import promptmaps
+from muma.default.settings import taikostoryboard as taikosettings, beatmaplocation as beatmapdirectory
+from muma.osu import parser
+from muma.osu.parser import listnotes as listnotes
+from muma.storyboardmods import StoryboardMods
+from muma.utils import promptmaps
 
 # We need to check if the osu! beatmap folder and settings exist before doing anything
 if not (os.path.isdir(beatmapdirectory) and os.path.isfile("./settings.ini")):

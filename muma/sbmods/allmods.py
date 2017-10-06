@@ -4,15 +4,13 @@ Storyboard Scroll Types
 
 import math
 
-from yumi.utils import findsetting
-from yumi.utils import isfloat
-from yumi.osu.notes.notetype import NoteType
-from yumi.osu.notes.hitsound import Hitsound
-from yumi.sbmods.tweentypes import hwave as wavetweens
-from yumi.sbmods.tweentypes import vwave as wavetypes
-from yumi.sbmods.transformations import note_transform as n_trans
+from muma.osu.notes import NoteType, Hitsound
+from muma.sbmods.transformations import note_transform as n_trans
+from muma.utils import findsetting
+from muma.utils import isfloat
 
 
+# Done | Needs R/UD
 def doublescroll(notes, bpm, d_angle, k_angle, z):
     out = ""
     d2r_scale = math.pi / 180  # Deg to Radians ratio.
@@ -107,55 +105,7 @@ def doublescroll(notes, bpm, d_angle, k_angle, z):
     return out
 
 
-def scrolltween(notes, bpm, tween, z):
-    # 1 = Brake, 2 = Boost
-    # Tween = the tweening type described above.
-    out = ""
-    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-
-    # Get notecount, receptor coordinates, playfield length. Reverse the notes list for the correct draw order.
-    notes2 = list(reversed(notes))
-    receptor_x = int(findsetting("Receptor_X"))
-    receptor_y = int(findsetting("Receptor_Y"))
-    pfl = int(findsetting("PlayfieldLength"))
-    notecount = len(notes)
-
-    for i in range(0, notecount):
-        n = notes2[i]  # Current note
-        n_in = int(n.t - (60000 / bpm * 4))  # Drawing time
-        n_hs = Hitsound(n.hs)
-
-        # We put the tween accordingly. 0 will work, but is not the subject of this mod.
-        out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-            "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,{},{},{},{},{}\n".format(tween, n_in, n.t, receptor_x + pfl, receptor_x)
-
-        # Finisher scale rule
-        if n_hs.isfinish():
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        # Note color rule
-        out += n_trans(n, z, n_in, False)
-
-        # Overlay scale and movement rules are similar to the note
-        if n_hs.isfinish():
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,{},{},{},{},{}\n".format(tween, n_in, n.t, receptor_x + pfl, receptor_x)
-        out += n_trans(n, z, n_in, True)
-    return out
-
-
+# Done | Needs R/UD
 def horizwave(notes, bpm, tween, freq, z):
     out = ""
     notes2 = list(reversed(notes))
@@ -176,12 +126,12 @@ def horizwave(notes, bpm, tween, freq, z):
         out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
 
         for w in range(0, freq):
-            out += " MX,{},{},{},{},{}\n".format(wavetweens[tween][0],
+            out += " MX,{},{},{},{},{}\n".format(tween[0],
                                                  n_in + w * n_st / freq,
                                                  n_in + (w + 1) * n_st / freq,
                                                  receptor_x + pfl - (w * pfl / freq),
                                                  receptor_x + pfl - ((w + 1) * pfl / freq))
-            out += " MX,{},{},{},{},{}\n".format(wavetweens[tween][1],
+            out += " MX,{},{},{},{},{}\n".format(tween[1],
                                                  n_in + w * n_st / freq,
                                                  n_in + (w + 1) * n_st / freq,
                                                  receptor_x + pfl - (w * pfl / freq),
@@ -205,12 +155,12 @@ def horizwave(notes, bpm, tween, freq, z):
 
         out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
         for w in range(0, freq):
-            out += " MX,{},{},{},{},{}\n".format(wavetweens[tween][0],
+            out += " MX,{},{},{},{},{}\n".format(tween[0],
                                                  n_in + w * n_st / freq,
                                                  n_in + (w + 1) * n_st / freq,
                                                  receptor_x + pfl - (w * pfl / freq),
                                                  receptor_x + pfl - ((w + 1) * pfl / freq))
-            out += " MX,{},{},{},{},{}\n".format(wavetweens[tween][1],
+            out += " MX,{},{},{},{},{}\n".format(tween[1],
                                                  n_in + w * n_st / freq,
                                                  n_in + (w + 1) * n_st / freq,
                                                  receptor_x + pfl - (w * pfl / freq),
@@ -220,185 +170,7 @@ def horizwave(notes, bpm, tween, freq, z):
     return out
 
 
-def reverse(notes, bpm, z):
-    out = ""
-    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-    notes2 = list(reversed(notes))
-    receptor_x = int(findsetting("ReversedReceptor_X"))
-    receptor_y = int(findsetting("Receptor_Y"))
-    pfl = int(findsetting("PlayfieldLength"))
-    notecount = len(notes)
-
-    for i in range(0, notecount):
-        n = notes2[i]
-        n_in = int(n.t - (60000 / bpm * 4))
-        n_hs = Hitsound(n.hs)
-
-        out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-            "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x - pfl, receptor_x)
-
-        if n_hs.isfinish():
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += n_trans(n, z, n_in, False)
-
-        if n_hs.isfinish():
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x - pfl, receptor_x)
-        out += n_trans(n, z, n_in, True)
-
-    return out
-
-
-def negascroll(notes, bpm, z):
-    out = ""
-    notes2 = list(reversed(notes))
-    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-    receptor_x = int(findsetting("Receptor_X"))
-    receptor_y = int(findsetting("Receptor_Y"))
-    pfl = int(int(findsetting("PlayfieldLength")) / 3.5)
-    notecount = len(notes)
-
-    for i in range(0, notecount):
-        n = notes2[i]
-        n_in = int(n.t - (60000 / bpm * 4))
-        n_hs = Hitsound(n.hs)
-
-        out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-            "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x - pfl, receptor_x)
-
-        if n_hs.isfinish():
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += n_trans(n, z, n_in, False)
-
-        if n_hs.isfinish():
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x - pfl, receptor_x)
-        out += n_trans(n, z, n_in, True)
-
-    return out
-
-
-def split(notes, bpm, z):
-    out = ""
-    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-
-    notecount = len(notes)
-    notes2 = list(reversed(notes))
-    receptor_x = 320
-    receptor_y = int(findsetting("Receptor_Y"))
-    pfl = int(int(findsetting("PlayfieldLength")) / 1.5)
-
-    for i in range(0, notecount):
-        n = notes2[i]
-        n_in = int(n.t - (60000 / bpm * 4))
-        n_type = NoteType(n.note_type)
-        n_hs = Hitsound(n.hs)
-
-        out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-            "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        if n_hs.iskat() or n_type.isspinner():
-            out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x - pfl, receptor_x)
-        else:
-            out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
-
-        if n_hs.isfinish():
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += n_trans(n, z, n_in, False)
-
-        if n_hs.isfinish():
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        if n_hs.iskat() or n_type.isspinner():
-            out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x - pfl, receptor_x)
-        else:
-            out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
-
-        out += n_trans(n, z, n_in, True)
-    return out
-
-
-def normal(notes, bpm, z):
-    speed_str = ""
-    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-    print "Scroll speed multiplier:"
-    while not isfloat(speed_str):
-        speed_str = raw_input(">>>")
-    speed = max(float(speed_str), 0.01)
-    notecount = len(notes)
-    notes2 = list(reversed(notes))
-    out = ""
-    receptor_x = int(findsetting("Receptor_X"))
-    receptor_y = int(findsetting("Receptor_Y"))
-    pfl = int(findsetting("PlayfieldLength"))
-
-    for i in range(0, notecount):
-        n = notes2[i]
-        n_in = int(n.t - (60000 / bpm * (4 / speed)))
-        n_hs = Hitsound(n.hs)
-
-        out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-            "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
-
-        if n_hs.isfinish():
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += n_trans(n, z, n_in, False)
-
-        if n_hs.isfinish():
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
-        out += n_trans(n, z, n_in, True)
-    return out
-
-
+# Done | Needs R/UD
 def anglescroll(notes, bpm, angle, z):
     speed_str = ""
     d2r_scale = math.pi / 180  # Deg to Radians ratio.
@@ -456,148 +228,7 @@ def anglescroll(notes, bpm, angle, z):
     return out
 
 
-def clock(notes, bpm, z):
-    speed_str = ""
-    rad_str = ""
-    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-
-    print "Beats for full revolution (max = 8):"
-    while not isfloat(speed_str):
-        speed_str = raw_input(">>>")
-    beats_rev = min(float(speed_str), 8)
-
-    print "Radius of the Clock:"
-    while not isfloat(rad_str):
-        rad_str = raw_input(">>>")
-    radius = int(rad_str)
-
-    notecount = len(notes)
-    notes2 = list(reversed(notes))
-    out = ""
-
-    for i in range(0, notecount):
-        n = notes2[i]
-        n_in = notes[0].t
-        n_out = n_in + (60000 / bpm * beats_rev)
-        n_hs = Hitsound(n.hs)
-        note_beat = (n.t - n_in) / (60000 / bpm)
-
-        if float(note_beat) < float(beats_rev):
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
-            note_y = 360 + radius * math.sin((note_beat / beats_rev) * (2 * math.pi) - 0.5 * math.pi)
-            note_x = 320 + radius * math.cos((note_beat / beats_rev) * (2 * math.pi) - 0.5 * math.pi)
-
-            out += " MY,0,{},{},{}\n".format(n_in, int(n_out), int(note_y))
-            out += " MX,0,{},{},{}\n".format(n_in, int(n_out), int(note_x))
-
-            if n_hs.isfinish():
-                out += " S,0,{},,{}\n".format(n.t, 0.25 * scale)
-            else:
-                out += " S,0,{},,{}\n".format(n.t, 0.18 * scale)
-
-            out += n_trans(n, z, n_in, False)
-
-            if n_hs.isfinish():
-                out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                    "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay")
-                out += " S,0,{},,{}\n".format(n.t, 0.25 * scale)
-            else:
-                out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                    "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay")
-                out += " S,0,{},,{}\n".format(n.t, 0.18 * scale)
-
-            out += " MY,0,{},{},{}\n".format(n_in, int(n_out), int(note_y))
-            out += " MX,0,{},{},{}\n".format(n_in, int(n_out), int(note_x))
-            out += n_trans(n, z, n_in, True)
-    return out
-
-
-def upsidedown(notes, bpm, z):
-    # Get notecount, receptor coordinates, playfield length. Reverse the notes list for the correct draw order.
-    notecount = len(notes)
-    notes2 = list(reversed(notes))
-    out = ""
-    receptor_x = int(findsetting("Receptor_X"))
-    receptor_y = int(findsetting("UpsideDownReceptor_Y"))
-    pfl = int(findsetting("PlayfieldLength"))
-
-    for i in range(0, notecount):
-        n = notes2[i]
-        n_in = int(n.t - (60000 / bpm * 4))
-        n_hs = Hitsound(n.hs)
-
-        out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-            "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
-        out += " R,0,{},,{}\n".format(n.t, math.pi)
-
-        if n_hs.isfinish():
-            out += " S,0,{},,0.5\n".format(n.t)
-        else:
-            out += " S,0,{},,0.35\n".format(n.t)
-
-        out += n_trans(n, z, n_in, False)
-
-        if n_hs.isfinish():
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay")
-            out += " S,0,{},,0.5\n".format(n.t)
-        else:
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay")
-            out += " S,0,{},,0.35\n".format(n.t)
-
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
-        out += n_trans(n, z, n_in, True)
-    return out
-
-
-def upsidedownrev(notes, bpm, z):
-    # Get notecount, receptor coordinates, playfield length. Reverse the notes list for the correct draw order.
-    notecount = len(notes)
-    notes2 = list(reversed(notes))
-    out = ""
-    receptor_x = int(findsetting("ReversedReceptor_X"))
-    receptor_y = int(findsetting("UpsideDownReceptor_Y"))
-    pfl = int(findsetting("PlayfieldLength"))
-
-    for i in range(0, notecount):
-        n = notes2[i]  # Current note
-        n_in = int(n.t - (60000 / bpm * 4))  # Draw time
-        n_hs = Hitsound(n.hs)
-
-        # Pretty straightforward. It's just normal scroll but pretty much rotated 180 deg.
-        out += "Sprite,Foreground,Centre,\"SB/note.png\",320,240\n"
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x - pfl, receptor_x)
-        out += " R,0,{},,{}\n".format(n.t, math.pi)
-
-        # Finisher Scale
-        if n_hs.isfinish():
-            out += " S,0,{},,0.5\n".format(n.t)
-        else:
-            out += " S,0,{},,0.35\n".format(n.t)
-
-        # Note Color
-        out += n_trans(n, z, n_in, False)
-
-        # Overlay
-        if n_hs.isfinish():
-            out += "Sprite,Foreground,Centre,\"SB/notebig-overlay.png\",320,240\n"
-            out += " S,0,{},,0.5\n".format(n.t)
-        else:
-            out += "Sprite,Foreground,Centre,\"SB/note-overlay.png\",320,240\n"
-            out += " S,0,{},,0.35\n".format(n.t)
-
-        out += " MY,0,{},{},{}\n".format(n_in, n.t, receptor_y)
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x - pfl, receptor_x)
-        out += n_trans(n, z, n_in, True)
-    return out
-
-
+# Pending Adaptation | Needs R/UD
 def star(notes, bpm, z):
     out = ""
 
@@ -674,6 +305,7 @@ def star(notes, bpm, z):
     return out
 
 
+# Pending Adaptation
 def spiral(notes, bpm, degoffset, z):
     # This mod is centered on a single point.
     d2r_scale = math.pi / 180  # Deg to Radians ratio.
@@ -743,7 +375,8 @@ def spiral(notes, bpm, degoffset, z):
     return out
 
 
-def wave(notes, bpm, wave_type, amplitude, freq, z):
+# Done | Needs R/UD
+def wave(notes, bpm, amplitude, freq, z, arr_tweens):
     freq2 = 4. / freq  # It's actually the period; it's so we can have more periods if the frequency is higher.
     scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
 
@@ -769,16 +402,13 @@ def wave(notes, bpm, wave_type, amplitude, freq, z):
             "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
         out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
         for q in range(freq, 0, -1):
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(arr_tweens[0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
                                                  int(n.t - 60000 / bpm * (q - 0.25) * freq2), receptor_y,
                                                  receptor_y - amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.50) * freq2), receptor_y - amplitude,
-                                                 receptor_y)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][2], int(n.t - 60000 / bpm * (q - 0.50) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2), receptor_y,
+            out += " MY,{},{},{},{},{}\n".format(arr_tweens[1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
+                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2), receptor_y - amplitude,
                                                  receptor_y + amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][3], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(arr_tweens[2], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
                                                  int(n.t - 60000 / bpm * (q - 1.00) * freq2), receptor_y + amplitude,
                                                  receptor_y)
 
@@ -804,19 +434,15 @@ def wave(notes, bpm, wave_type, amplitude, freq, z):
         out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
 
         for q in range(freq, 0, -1):
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(arr_tweens[0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
                                                  int(n.t - 60000 / bpm * (q - 0.25) * freq2), receptor_y,
                                                  receptor_y - amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.50) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(arr_tweens[1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
+                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2),
                                                  receptor_y - amplitude,
-                                                 receptor_y)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][2], int(n.t - 60000 / bpm * (q - 0.50) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2), receptor_y,
                                                  receptor_y + amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][3], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 1.00) * freq2),
-                                                 receptor_y + amplitude,
+            out += " MY,{},{},{},{},{}\n".format(arr_tweens[2], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
+                                                 int(n.t - 60000 / bpm * (q - 1.00) * freq2), receptor_y + amplitude,
                                                  receptor_y)
 
         out += n_trans(n, z, n_in, True)
@@ -824,6 +450,7 @@ def wave(notes, bpm, wave_type, amplitude, freq, z):
     return out
 
 
+# Done | Needs R/UD
 def wave2(notes, bpm, z):
     speed_str = ""
     scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
@@ -872,6 +499,7 @@ def wave2(notes, bpm, z):
     return out
 
 
+# Done | Needs R/UD
 def tanz(notes, bpm, freq, z):
     freq2 = 4. / freq  # It's actually the period; it's so we can have more periods if the frequency is higher.
     scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
@@ -967,86 +595,7 @@ def tanz(notes, bpm, freq, z):
     return out
 
 
-def bounce(notes, bpm, wave_type, amplitude, freq, z):
-    freq2 = 4. / freq  # It's actually the period; it's so we can have more periods if the frequency is higher.
-    scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
-
-    # Get notecount, receptor coordinates, playfield length. Reverse the notes list for the correct draw order.
-    notecount = len(notes)
-    notes2 = list(reversed(notes))
-    receptor_x = int(findsetting("Receptor_X"))
-    receptor_y = int(findsetting("Receptor_Y"))
-    pfl = int(findsetting("PlayfieldLength"))
-
-    out = ""
-
-    for i in range(0, notecount):
-        n = notes2[i]  # Current note
-        n_in = int(n.t - (60000 / bpm * 4))  # Drawing time
-        n_hs = Hitsound(n.hs)
-
-        # Rule: On the X axis, scroll normally. On the Y axis, scroll such that:
-        # - Move vertically following the wave tween type provided by the user. Wave tweens are defined in tweentypes.py
-        # - Do it freq amount of times. As it is regular, each time will be divided by 4 subtweens.
-        # - Amplitude is how big the change is.
-        out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-            "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
-        for q in range(freq, 0, -1):
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.25) * freq2), receptor_y,
-                                                 receptor_y - amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.50) * freq2), receptor_y - amplitude,
-                                                 receptor_y)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][2], int(n.t - 60000 / bpm * (q - 0.50) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2), receptor_y,
-                                                 receptor_y - amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][3], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 1.00) * freq2), receptor_y - amplitude,
-                                                 receptor_y)
-
-        # Smaller comment to say finisher scale rules.
-        if n_hs.isfinish():
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        # Note coloring rules
-        out += n_trans(n, z, n_in, False)
-
-        # I don't need to explain it once again, the rules are described above. Overlay rules are the same.
-        if n_hs.isfinish():
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.5 * scale)
-        else:
-            out += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay")
-            out += " S,0,{},,{}\n".format(n.t, 0.35 * scale)
-
-        out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
-
-        for q in range(freq, 0, -1):
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.25) * freq2), receptor_y,
-                                                 receptor_y - amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.50) * freq2),
-                                                 receptor_y - amplitude,
-                                                 receptor_y)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][2], int(n.t - 60000 / bpm * (q - 0.50) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2), receptor_y,
-                                                 receptor_y - amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[wave_type][3], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 1.00) * freq2),
-                                                 receptor_y - amplitude,
-                                                 receptor_y)
-        out += n_trans(n, z, n_in, True)
-
-    return out
-
-
+# Done | Needs R/UD
 def compound(notes, bpm, h_wave_type, v_wave_type, amplitude, freq, z):
     freq2 = 4. / freq  # It's actually the period; it's so we can have more periods if the frequency is higher.
     scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
@@ -1074,27 +623,24 @@ def compound(notes, bpm, h_wave_type, v_wave_type, amplitude, freq, z):
             "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
         # out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
         for w in range(0, freq):
-            out += " MX,{},{},{},{},{}\n".format(wavetweens[h_wave_type][0],
+            out += " MX,{},{},{},{},{}\n".format(h_wave_type[0],
                                                  n_in + w * n_st / freq,
                                                  n_in + (w + 1) * n_st / freq,
                                                  receptor_x + pfl - (w * pfl / freq),
                                                  receptor_x + pfl - ((w + 1) * pfl / freq))
-            out += " MX,{},{},{},{},{}\n".format(wavetweens[h_wave_type][1],
+            out += " MX,{},{},{},{},{}\n".format(h_wave_type[1],
                                                  n_in + w * n_st / freq,
                                                  n_in + (w + 1) * n_st / freq,
                                                  receptor_x + pfl - (w * pfl / freq),
                                                  receptor_x + pfl - ((w + 1) * pfl / freq))
         for q in range(freq, 0, -1):
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[v_wave_type][0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(v_wave_type[0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
                                                  int(n.t - 60000 / bpm * (q - 0.25) * freq2), receptor_y,
                                                  receptor_y - amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[v_wave_type][1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.50) * freq2), receptor_y - amplitude,
-                                                 receptor_y)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[v_wave_type][2], int(n.t - 60000 / bpm * (q - 0.50) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2), receptor_y,
+            out += " MY,{},{},{},{},{}\n".format(v_wave_type[1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
+                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2), receptor_y - amplitude,
                                                  receptor_y + amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[v_wave_type][3], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(v_wave_type[2], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
                                                  int(n.t - 60000 / bpm * (q - 1.00) * freq2), receptor_y + amplitude,
                                                  receptor_y)
 
@@ -1119,28 +665,25 @@ def compound(notes, bpm, h_wave_type, v_wave_type, amplitude, freq, z):
 
         # out += " MX,0,{},{},{},{}\n".format(n_in, n.t, receptor_x + pfl, receptor_x)
         for w in range(0, freq):
-            out += " MX,{},{},{},{},{}\n".format(wavetweens[h_wave_type][0],
+            out += " MX,{},{},{},{},{}\n".format(h_wave_type[0],
                                                  n_in + w * n_st / freq,
                                                  n_in + (w + 1) * n_st / freq,
                                                  receptor_x + pfl - (w * pfl / freq),
                                                  receptor_x + pfl - ((w + 1) * pfl / freq))
-            out += " MX,{},{},{},{},{}\n".format(wavetweens[h_wave_type][1],
+            out += " MX,{},{},{},{},{}\n".format(h_wave_type[1],
                                                  n_in + w * n_st / freq,
                                                  n_in + (w + 1) * n_st / freq,
                                                  receptor_x + pfl - (w * pfl / freq),
                                                  receptor_x + pfl - ((w + 1) * pfl / freq))
         for q in range(freq, 0, -1):
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[v_wave_type][0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(v_wave_type[0], int(n.t - 60000 / bpm * (q - 0.00) * freq2),
                                                  int(n.t - 60000 / bpm * (q - 0.25) * freq2), receptor_y,
                                                  receptor_y - amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[v_wave_type][1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.50) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(v_wave_type[1], int(n.t - 60000 / bpm * (q - 0.25) * freq2),
+                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2),
                                                  receptor_y - amplitude,
-                                                 receptor_y)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[v_wave_type][2], int(n.t - 60000 / bpm * (q - 0.50) * freq2),
-                                                 int(n.t - 60000 / bpm * (q - 0.75) * freq2), receptor_y,
                                                  receptor_y + amplitude)
-            out += " MY,{},{},{},{},{}\n".format(wavetypes[v_wave_type][3], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
+            out += " MY,{},{},{},{},{}\n".format(v_wave_type[2], int(n.t - 60000 / bpm * (q - 0.75) * freq2),
                                                  int(n.t - 60000 / bpm * (q - 1.00) * freq2),
                                                  receptor_y + amplitude,
                                                  receptor_y)
@@ -1149,13 +692,15 @@ def compound(notes, bpm, h_wave_type, v_wave_type, amplitude, freq, z):
     return out
 
 
-def doublewave(notes, bpm, wave_type, amplitude, freq, z):
+# Done
+def doublewave(notes, bpm, arr_tweens, amplitude, freq, z):
     # We just do twice the simple wave, but the amplitudes are n and -n for better effect.
-    out1 = wave(notes, bpm, wave_type, amplitude, freq, z)
-    out2 = wave(notes, bpm, wave_type, -amplitude, freq, z)
+    out1 = wave(notes, bpm, amplitude, freq, z, arr_tweens)
+    out2 = wave(notes, bpm, -amplitude, freq, z, arr_tweens)
     return "{}\n{}".format(out1, out2)
 
 
+# Done | Needs R/UD
 def visioncone(notes, bpm, cone_angle, freq, z):
     # This mod is centered on a single point.
     d2r_scale = math.pi / 180  # Deg to Radians ratio.

@@ -1,7 +1,11 @@
+import sys
+
 from switchcase import switch
-from yumi.utils import isfloat
+
 import sbmods
+import muma.note_mods as mods
 from sbmods import tweentypes
+from muma.utils import isfloat
 
 modtypes = [
     "Note counters...",
@@ -17,25 +21,24 @@ notecounters = [
 ]
 
 scrollingtypes = [
+    "Normal V2",
+    "Tweened Scroll V2",
     "Double Scrolling",
-    "Brake",
-    "Reversed",
-    "Negative Scroll",
-    "Split",
-    "Normal",
-    "Upside Down",
-    "Boost",
+    "----",
+    "----",
+    "Split V2",
+    "----",
     "Four Star",
     "Vertical Wave",
     "Double V. Wave",
     "Horizontal Wave",
     "Spiral Scroll",
-    "Upside Down + Reversed",
-    "Vertical Bounce",
+    "----",
+    "Vertical Bounce V2",
     "Compound Scroll",
     "Cone",
     "TanZ (Hidden not applicable)",
-    "Clock (Experimental as Rox sucks at making Taiko mods)",
+    "Clock V2",
     "Receptor Wave",
     "Angled Scroll",
 ]
@@ -76,7 +79,7 @@ def sb_counters(y, notes):
         if case2(2):
             out = sbmods.counters.rightcountermirror(notes)
         if case2(3):
-            out = sbmods.counters.leftcounterupside(notes)
+            out = sbmods.counters.upsidemirrorright(notes)
     return out
 
 
@@ -84,64 +87,70 @@ def note_mods(y, z, notes, bpm):
     out = ""
     for case2 in switch(y):
         if case2(0):
+            normal = mods.ScrollTween.ScrollTween(notes, bpm, z)
+            out = normal.make_sb()
+
+        if case2(1):
+            tween = getwavetween(1)[0]
+            tweenscroll = mods.ScrollTween.ScrollTween(notes, bpm, z, tween)
+            out = tweenscroll.make_sb()
+
+        if case2(2):
             d_angle, k_angle = getdonkatangle()
             out = sbmods.allmods.doublescroll(notes, bpm, -d_angle, -k_angle, z)
-        if case2(1):
-            out = sbmods.allmods.scrolltween(notes, bpm, 1, z)
-        if case2(2):
-            out = sbmods.allmods.reverse(notes, bpm, z)
         if case2(3):
-            out = sbmods.allmods.negascroll(notes, bpm, z)
+            pass
         if case2(4):
-            out = sbmods.allmods.split(notes, bpm, z)
+            pass
         if case2(5):
-            out = sbmods.allmods.normal(notes, bpm, z)
+            split = mods.Split.Split(notes, bpm, z)
+            out = split.make_sb()
         if case2(6):
-            out = sbmods.allmods.upsidedown(notes, bpm, z)
+            pass
         if case2(7):
-            out = sbmods.allmods.scrolltween(notes, bpm, 2, z)
-        if case2(8):
             out = sbmods.allmods.star(notes, bpm, z)
+        if case2(8):
+            amplitude, freq = getamplifreq()
+            arr_tween = getwavetween(3)
+            out = sbmods.allmods.wave(notes, bpm, amplitude, freq, z, arr_tween)
         if case2(9):
             amplitude, freq = getamplifreq()
-            tweentype = getwavetween()
-            out = sbmods.allmods.wave(notes, bpm, tweentype, amplitude, freq, z)
-        if case2(10):
-            amplitude, freq = getamplifreq()
-            tweentype = getwavetween()
+            tweentype = getwavetween(3)
             out = sbmods.allmods.doublewave(notes, bpm, tweentype, amplitude, freq, z)
-        if case2(11):
+        if case2(10):
             freq = getfreq()
-            tweentype = gethwavetween()
+            tweentype = getwavetween(2)
             out = sbmods.allmods.horizwave(notes, bpm, tweentype, freq, z)
-        if case2(12):
+        if case2(11):
             degoffset = getdegoffset()
             out = sbmods.allmods.spiral(notes, bpm, degoffset, z)
+        if case2(12):
+            pass
         if case2(13):
-            out = sbmods.allmods.upsidedownrev(notes, bpm, z)
+            bounce = mods.Bounce.Bounce(notes, bpm, z)
+            out = bounce.make_sb()
+
         if case2(14):
             amplitude, freq = getamplifreq()
-            tweentype = getwavetween()
-            out = sbmods.allmods.bounce(notes, bpm, tweentype, amplitude, freq, z)
-        if case2(15):
-            amplitude, freq = getamplifreq()
             print("-- Horizontal Tween --")
-            h_tweentype = gethwavetween()
+            h_tweentype = getwavetween(2)
             print("-- Vertical Tween --")
-            v_tweentype = getwavetween()
+            v_tweentype = getwavetween(3)
             out = sbmods.allmods.compound(notes, bpm, h_tweentype, v_tweentype, amplitude, freq, z)
-        if case2(16):
+        if case2(15):
             visioncone = getcone()
             freq = getffreq()
             out = sbmods.allmods.visioncone(notes, bpm, visioncone, freq, z)
-        if case2(17):
+        if case2(16):
             freq = getfreq()
             out = sbmods.allmods.tanz(notes, bpm, freq, z)
+        if case2(17):
+            clock = mods.Clock.Clock(notes, bpm, z)
+            out = clock.make_sb()
+
         if case2(18):
-            out = sbmods.allmods.clock(notes, bpm, z)
-        if case2(19):
             out = sbmods.allmods.wave2(notes, bpm, z)
-        if case2(20):
+        if case2(19):
             angle = getangle()
             out = sbmods.allmods.anglescroll(notes, bpm, angle, z)
     return out
@@ -216,17 +225,22 @@ def getffreq():
     return freq
 
 
-def getwavetween():
+def getwavetween(ntweens):
+    arr_tween = []
     tween_str = ""
-    for i in range(0, len(tweentypes.vwave)):
-        print("{}.\t{}".format(i, tweennumber(tweentypes.vwave[i])))
-    print "Enter your tween type:"
-    while not tween_str.isdigit():
-        tween_str = raw_input(">>>")
-    tween = int(tween_str)
-    if tween > len(tweentypes.vwave):
-        tween = 0
-    return tween
+    x = 1
+    for i in range(0, len(tweentypes.tweens), 5):
+        for offset in range(0, 5):
+            sys.stdout.write("{}   |   ".format(tweentypes.tweens[i + offset]))
+        print("")
+    while not x > ntweens:
+        print "Enter tween type {} ".format(x)
+        while not (tween_str.isdigit() and 0 <= int(tween_str) <= 34):
+            tween_str = raw_input(">>>")
+        arr_tween.append(int(tween_str))
+        tween_str = ""
+        x += 1
+    return arr_tween
 
 
 def getdegoffset():
@@ -249,19 +263,6 @@ def getcone():
     if angle >= 360:
         angle %= 360
     return angle
-
-
-def gethwavetween():
-    tween_str = ""
-    for i in range(0, len(tweentypes.hwave)):
-        print("{}.\t{}".format(i, tweennumber(tweentypes.hwave[i])))
-    print "Enter your tweening method:"
-    while not tween_str.isdigit():
-        tween_str = raw_input(">>>")
-    tween = int(tween_str)
-    if tween > len(tweentypes.hwave):
-        tween = 0
-    return tween
 
 
 def tweennumber(n):
