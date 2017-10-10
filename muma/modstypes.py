@@ -29,8 +29,8 @@ scrollingtypes = [
     "Split V2",
     "----",
     "Four Star",
-    "Vertical Wave",
-    "Double V. Wave",
+    "Vertical Wave V2",
+    "Double V. Wave V0",
     "Horizontal Wave",
     "Spiral Scroll",
     "----",
@@ -91,8 +91,8 @@ def note_mods(y, z, notes, bpm):
             out = normal.make_sb()
 
         if case2(1):
-            tween = getwavetween(1)[0]
-            tweenscroll = mods.ScrollTween(notes, bpm, z, tween)
+            tweenscroll = mods.ScrollTween(notes, bpm, z)
+            tweenscroll.tween_setup()
             out = tweenscroll.make_sb()
 
         if case2(2):

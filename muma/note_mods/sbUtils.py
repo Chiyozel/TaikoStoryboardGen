@@ -1,3 +1,4 @@
+import math
 import sys
 
 from muma.osu.notes import Hitsound
@@ -70,3 +71,7 @@ class sbUtils:
             tween_str = ""
             x += 1
         return arr_tween
+
+    @staticmethod
+    def convert_deg_to_rad(deg):
+        return deg * (math.pi / 180)

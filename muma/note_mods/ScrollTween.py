@@ -5,9 +5,15 @@ from muma.sbmods.transformations import note_transform as n_trans
 
 
 class ScrollTween(BasicMod):
-    def __init__(self, notes, bpm, transformation, tween=0):
+    def __init__(self, notes, bpm, transformation):
         BasicMod.__init__(self, notes, bpm, transformation)
-        self.tween = tween
+        self.tween = 0
+
+    def mod_setup(self):
+        pass
+
+    def tween_setup(self):
+        self.tween = muma.note_mods.sbUtils.sbUtils.getwavetween(1)[0]
 
     def note_to_sb(self, note):
         r_string = ""

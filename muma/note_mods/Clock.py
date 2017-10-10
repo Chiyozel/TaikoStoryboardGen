@@ -7,14 +7,7 @@ from muma.utils import findsetting, isfloat
 
 
 class Clock(BasicMod):
-    def note_to_sb(self, note):
-        pass
-
-    def __init__(self, notes, bpm, transformation):
-        self.beat_len = self.clock_rad = None
-        BasicMod.__init__(self, notes, bpm, transformation)
-
-    def setup(self):
+    def mod_setup(self):
         print("Length of a Clock revolution in beats")
         while True:
             len_str = raw_input(">>>")
@@ -29,6 +22,14 @@ class Clock(BasicMod):
                 break
         self.clock_rad = int(rad_srt)
 
+    def note_to_sb(self, note):
+        pass
+
+    def __init__(self, notes, bpm, transformation):
+        self.beat_len = self.clock_rad = None
+        BasicMod.__init__(self, notes, bpm, transformation)
+
+    def setup(self):
         print("Reverse?\t0=No\t1=Yes")
         while True:
             r_ = raw_input(">>>")

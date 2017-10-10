@@ -8,8 +8,9 @@ from muma.utils import findsetting
 class Split(BasicMod):
     def __init__(self, notes, bpm, transformation):
         BasicMod.__init__(self, notes, bpm, transformation)
-        self.beat_len = self.is_reverse = self.is_upside_down = self.is_mirror = None
-        self.setup()
+
+    def mod_setup(self):
+        pass
 
     def note_to_sb(self, note):
         r_string = ""

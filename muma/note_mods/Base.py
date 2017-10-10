@@ -9,6 +9,12 @@ class BasicMod:
         self.color = transformation
         self.scroll = self.is_reverse = self.is_upside_down = self.is_mirror = None
         self.setup()
+        self.mod_setup()
+
+    @abc.abstractmethod
+    def mod_setup(self):
+        """Implement the mod-specific setups"""
+        return
 
     def setup(self):
         print("Scroll Speed Multiplier")

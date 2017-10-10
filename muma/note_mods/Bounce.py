@@ -8,14 +8,7 @@ class Bounce(BasicMod):
     def __init__(self, notes, bpm, transformation):
         BasicMod.__init__(self, notes, bpm, transformation)
 
-    def setup(self):
-        print("Scroll Speed Multiplier")
-        while True:
-            speed_str = raw_input(">>>")
-            if isfloat(speed_str):
-                break
-        self.scroll = max(float(speed_str), 0.001)
-
+    def mod_setup(self):
         print("Frequency (Rounded to integers)")
         while True:
             freq_str = raw_input(">>>")
@@ -28,30 +21,9 @@ class Bounce(BasicMod):
             amp_str = raw_input(">>>")
             if isfloat(amp_str):
                 break
-        self.amp = 25 * min(float(amp_str), 1)
+        self.amp = 25 * float(amp_str)
 
         self.array_tweens = muma.note_mods.sbUtils.sbUtils.getwavetween(2)
-
-        print("Reverse?\t0=No\t1=Yes")
-        while True:
-            r_ = raw_input(">>>")
-            if r_.isdigit() and 0 <= int(r_) <= 1:
-                break
-        self.is_reverse = False if int(r_) == 0 else True
-
-        print("Upside down?\t0=No\t1=Yes")
-        while True:
-            r_ = raw_input(">>>")
-            if r_.isdigit() and 0 <= int(r_) <= 1:
-                break
-        self.is_upside_down = False if int(r_) == 0 else True
-
-        print("Mirror notes?\t0=No\t1=Yes")
-        while True:
-            r_ = raw_input(">>>")
-            if r_.isdigit() and 0 <= int(r_) <= 1:
-                break
-        self.is_mirror = False if int(r_) == 0 else True
 
     def note_to_sb(self, note):
         r_string = ""
