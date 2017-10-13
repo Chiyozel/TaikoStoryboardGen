@@ -5,5 +5,8 @@ from muma.sbmods.transformations import note_transform as n_trans
 
 
 class HorizontalWave(BasicMod):
+    def mod_setup(self):
+        pass
+
     def note_to_sb(self, note):
         pass

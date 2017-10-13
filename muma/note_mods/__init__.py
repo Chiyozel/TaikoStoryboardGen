@@ -14,3 +14,4 @@ from Star import Star
 from StraightSineScroll import StraightSineScroll
 from TangentZ import TangentZ
 from VisionCone import VisionCone
+from DoubleScroll import DoubleScroll
