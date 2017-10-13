@@ -30,16 +30,16 @@ scrollingtypes = [
     "----",
     "Four Star",
     "Vertical Wave V2",
-    "Double V. Wave V0",
+    "Double V. Wave V2",
     "Horizontal Wave",
     "Spiral Scroll",
     "----",
     "Vertical Bounce V2",
     "Compound Scroll",
-    "Cone",
+    "Cone V2",
     "TanZ (Hidden not applicable)",
     "Clock V2",
-    "Receptor Wave",
+    "Receptor Wave V2",
     "Double Scroll V2",
 ]
 
@@ -138,9 +138,8 @@ def note_mods(y, z, notes, bpm):
             v_tweentype = getwavetween(3)
             out = sbmods.allmods.compound(notes, bpm, h_tweentype, v_tweentype, amplitude, freq, z)
         if case2(15):
-            visioncone = getcone()
-            freq = getffreq()
-            out = sbmods.allmods.visioncone(notes, bpm, visioncone, freq, z)
+            visioncone = mods.VisionCone(notes, bpm, z)
+            out = visioncone.make_sb()
         if case2(16):
             freq = getfreq()
             out = sbmods.allmods.tanz(notes, bpm, freq, z)

@@ -25,10 +25,6 @@ class Clock(BasicMod):
     def note_to_sb(self, note):
         pass
 
-    def __init__(self, notes, bpm, transformation):
-        self.beat_len = self.clock_rad = None
-        BasicMod.__init__(self, notes, bpm, transformation)
-
     def setup(self):
         print("Reverse?\t0=No\t1=Yes")
         while True:

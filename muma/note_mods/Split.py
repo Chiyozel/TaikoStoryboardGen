@@ -6,9 +6,6 @@ from muma.utils import findsetting
 
 
 class Split(BasicMod):
-    def __init__(self, notes, bpm, transformation):
-        BasicMod.__init__(self, notes, bpm, transformation)
-
     def mod_setup(self):
         pass
 

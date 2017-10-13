@@ -5,9 +5,6 @@ from muma.sbmods.transformations import note_transform as n_trans
 
 
 class Bounce(BasicMod):
-    def __init__(self, notes, bpm, transformation):
-        BasicMod.__init__(self, notes, bpm, transformation)
-
     def mod_setup(self):
         print("Frequency (Rounded to integers)")
         while True:

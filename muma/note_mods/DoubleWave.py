@@ -5,9 +5,6 @@ from muma.sbmods.transformations import note_transform as n_trans
 
 
 class DoubleWave(VerticalWave):
-    def __init__(self, notes, bpm, transformation):
-        VerticalWave.__init__(self, notes, bpm, transformation)
-
     def make_sb(self):
         out = ""
         rev_note_list = list(reversed(self.note_list))

@@ -69,6 +69,3 @@ class DoubleScroll(BasicMod):
         r_string += n_trans(note, self.color, note_in, True)
 
         return r_string
-
-    def __init__(self, notes, bpm, transformation):
-        BasicMod.__init__(self, notes, bpm, transformation)
