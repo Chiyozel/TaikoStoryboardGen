@@ -33,9 +33,16 @@ def findsetting(setting):
         for line in settings_file:
             key, value = line.strip('\n').split("=")
             listsettings[key] = value
-        return listsettings[setting] if setting in listsettings.keys() else taikostoryboard[setting]
+        return f(listsettings[setting]) if setting in listsettings.keys() else taikostoryboard[setting]
     else:
         return taikostoryboard[setting]
+
+
+def f(x):
+    if type(x) is str or type(x) is unicode:
+        return False if x.lower() == "false" else True if x.lower() == "true" else x
+    else:
+        return x
 
 
 def isfloat(s):

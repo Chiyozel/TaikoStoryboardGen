@@ -23,7 +23,7 @@ notecounters = [
 scrollingtypes = [
     "Normal V2",
     "Tweened Scroll V2",
-    "Double Scrolling",
+    "Angled Scroll V2",
     "----",
     "----",
     "Split V2",
@@ -40,7 +40,7 @@ scrollingtypes = [
     "TanZ (Hidden not applicable)",
     "Clock V2",
     "Receptor Wave",
-    "Angled Scroll",
+    "Double Scroll V2",
 ]
 
 notealterations = [
@@ -89,15 +89,13 @@ def note_mods(y, z, notes, bpm):
         if case2(0):
             normal = mods.ScrollTween(notes, bpm, z)
             out = normal.make_sb()
-
         if case2(1):
             tweenscroll = mods.ScrollTween(notes, bpm, z)
             tweenscroll.tween_setup()
             out = tweenscroll.make_sb()
-
         if case2(2):
-            d_angle, k_angle = getdonkatangle()
-            out = sbmods.allmods.doublescroll(notes, bpm, -d_angle, -k_angle, z)
+            angle = mods.AngleScroll(notes, bpm, z)
+            out = angle.make_sb()
         if case2(3):
             pass
         if case2(4):
@@ -107,12 +105,13 @@ def note_mods(y, z, notes, bpm):
             out = split.make_sb()
         if case2(6):
             pass
+
         if case2(7):
             out = sbmods.allmods.star(notes, bpm, z)
+
         if case2(8):
             wave = mods.VerticalWave(notes, bpm, z)
             out = wave.make_sb()
-
         if case2(9):
             dwave = mods.DoubleWave(notes, bpm, z)
             out = dwave.make_sb()
@@ -126,6 +125,7 @@ def note_mods(y, z, notes, bpm):
             out = sbmods.allmods.spiral(notes, bpm, degoffset, z)
         if case2(12):
             pass
+
         if case2(13):
             bounce = mods.Bounce(notes, bpm, z)
             out = bounce.make_sb()
@@ -144,15 +144,16 @@ def note_mods(y, z, notes, bpm):
         if case2(16):
             freq = getfreq()
             out = sbmods.allmods.tanz(notes, bpm, freq, z)
+
         if case2(17):
             clock = mods.Clock(notes, bpm, z)
             out = clock.make_sb()
-
         if case2(18):
-            out = sbmods.allmods.wave2(notes, bpm, z)
+            wave2 = mods.StraightSineScroll(notes, bpm, z)
+            out = wave2.make_sb()
         if case2(19):
-            angle = getangle()
-            out = sbmods.allmods.anglescroll(notes, bpm, angle, z)
+            d_scroll = mods.DoubleScroll(notes, bpm, z)
+            out = d_scroll.make_sb()
     return out
 
 
