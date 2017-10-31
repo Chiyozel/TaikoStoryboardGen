@@ -51,6 +51,7 @@ class StoryboardMods:
     def choices(self, notessb):
         print("What do you want to do? - 'q' to exit")
         n = 1
+        y = z = 0
 
         for x in modstypes.modtypes:
             print ("{}.\t{}".format(n, x))

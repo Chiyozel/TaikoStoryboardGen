@@ -41,6 +41,8 @@ def note_transform(n, transform_type, n_in, overlay=False):
             if case(7) and not overlay:
                 n_x = int(n_x / 8)
                 out += " C,0,{},{},100,160,255,128,128,128\n".format(n_in + 4 * n_x, n.t - 2 * n_x)
+            if case(8) and not overlay:
+                out += " C,0,{},,155,95,0\n".format(n.t)
     elif n_type.isslider():
         # 2 3 5 6
         for case in switch(transform_type):
@@ -71,6 +73,8 @@ def note_transform(n, transform_type, n_in, overlay=False):
             if case(7) and not overlay:
                 n_x = int(n_x / 8)
                 out += " C,0,{},{},255,200,0,128,128,128\n".format(n_in + 4 * n_x, n.t - 2 * n_x)
+            if case(8) and not overlay:
+                out += " C,0,{},,0,55,255\n".format(n.t)
     elif n_type.isspinner():
         # 2 3 5 6
         for case in switch(transform_type):
@@ -101,6 +105,8 @@ def note_transform(n, transform_type, n_in, overlay=False):
             if case(7) and not overlay:
                 n_x = int(n_x / 8)
                 out += " C,0,{},{},100,160,255,128,128,128\n".format(n_in + 4 * n_x, n.t - 2 * n_x)
+            if case(8) and not overlay:
+                out += " C,0,{},,127,127,127\n".format(n.t)
     else:
         # 2 3 4 5 6
         for case in switch(transform_type):
@@ -132,4 +138,6 @@ def note_transform(n, transform_type, n_in, overlay=False):
             if case(7) and not overlay:
                 n_x = int(n_x / 8)
                 out += " C,0,{},{},255,80,80,128,128,128\n".format(n_in + 4 * n_x, n.t - 2 * n_x)
+            if case(8) and not overlay:
+                out += " C,0,{},,0,175,175\n".format(n.t)
     return out

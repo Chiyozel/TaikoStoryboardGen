@@ -44,7 +44,7 @@ class VisionCone(BasicMod):
             r_string += " P,0,{},,H\n".format(note_in)
 
         # Note Overlay
-        r_string += muma.note_mods.sbUtils.sbUtils.overlay(note)
+        r_string += muma.note_mods.sbUtils.sbUtils.overlay(note, self.color)
         r_string += n_trans(note, self.color, note_in, True)
         r_string += " MY,0,{},{},{},{}\n".format(note_in, note.t, note_y, self.receptor_y())
         r_string += " MX,0,{},{},{},{}\n".format(note_in, note.t,

@@ -42,7 +42,7 @@ class ScrollTween(BasicMod):
             r_string += " P,0,{},,H\n".format(note_in)
 
         # Note Overlay
-        r_string += muma.note_mods.sbUtils.sbUtils.overlay(note)
+        r_string += muma.note_mods.sbUtils.sbUtils.overlay(note, self.color)
         r_string += " MY,{},{},,{}\n".format(self.tween,
                                              note_in,
                                              self.receptor_y())

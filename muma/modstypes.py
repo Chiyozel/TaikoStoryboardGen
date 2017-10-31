@@ -52,6 +52,7 @@ notealterations = [
     "Hidden",
     "Hidden II (Only colors)",
     "Monochrome (tasuke912)",
+    "Inverted Colors",
 ]
 
 

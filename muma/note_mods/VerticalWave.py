@@ -54,7 +54,7 @@ class VerticalWave(BasicMod):
                                                       self.receptor_y() + (-1 if self.is_upside_down else 1) * self.amp,
                                                       self.receptor_y())
 
-        r_string += muma.note_mods.sbUtils.sbUtils.overlay(note)
+        r_string += muma.note_mods.sbUtils.sbUtils.overlay(note, self.color)
         r_string += n_trans(note, self.color, note_in, True)
         r_string += " MX,0,{},{},{},{}\n".format(note_in, note.t,
                                                  self.receptor_x() + playfield_length * (-1 if self.is_reverse else 1),

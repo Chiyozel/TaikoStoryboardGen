@@ -29,29 +29,37 @@ class sbUtils:
             return " S,0,{},,{}\n".format(note.t, 0.175 * scale)
 
     @staticmethod
-    def overlay(note):
+    def overlay(note, color):
         scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
 
         if Hitsound(note.hs).isfinish():
-            return "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay") \
+            return "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format("bigcirc_inv" if color == 8 else
+                                                                          "taikobigcircleoverlay" if findsetting(
+                                                                              "UseSkinElements")
+                                                                          else "SB/notebig-overlay") \
                    + " S,0,{},,{}\n".format(note.t, 0.50 * scale)
         else:
-            return "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay") \
+            return "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format("hitcirc_inv" if color == 8 else
+                                                                          "taikohitcircleoverlay" if findsetting(
+                                                                              "UseSkinElements")
+                                                                          else "SB/note-overlay") \
                    + " S,0,{},,{}\n".format(note.t, 0.35 * scale)
 
     @staticmethod
-    def overlay_clock(note):
+    def overlay_clock(note, color):
         scale = float(findsetting("ScaleFactor")) if isfloat(findsetting("ScaleFactor")) else 1
 
         if Hitsound(note.hs).isfinish():
-            return "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikobigcircleoverlay" if findsetting("UseSkinElements") else "SB/notebig-overlay") \
+            return "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format("bigcirc_inv" if color == 8 else
+                                                                          "taikobigcircleoverlay" if findsetting(
+                                                                              "UseSkinElements")
+                                                                          else "SB/notebig-overlay") \
                    + " S,0,{},,{}\n".format(note.t, 0.25 * scale)
         else:
-            return "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
-                "taikohitcircleoverlay" if findsetting("UseSkinElements") else "SB/note-overlay") \
+            return "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format("hitcirc_inv" if color == 8 else
+                                                                          "taikohitcircleoverlay" if findsetting(
+                                                                              "UseSkinElements")
+                                                                          else "SB/note-overlay") \
                    + " S,0,{},,{}\n".format(note.t, 0.175 * scale)
 
     @staticmethod

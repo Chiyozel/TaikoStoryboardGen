@@ -49,7 +49,7 @@ class Bounce(BasicMod):
                                                       self.receptor_y())
 
         # Note Overlay
-        r_string += muma.note_mods.sbUtils.sbUtils.overlay(note)
+        r_string += muma.note_mods.sbUtils.sbUtils.overlay(note, self.color)
         r_string += " MX,0,{},{},{},{}\n".format(note_in, note.t,
                                                  self.receptor_x() + playfield_length * (-1 if self.is_reverse else 1),
                                                  self.receptor_x())
