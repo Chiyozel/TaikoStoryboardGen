@@ -2,7 +2,7 @@ from muma.osu.notes import NoteType, Note
 
 
 def istaiko(f):
-    f2 = open(f, "r")
+    f2 = open(f, "r", encoding="utf8")
     for line in f2:
         if "Mode: 1\n" in line:
             return True
@@ -10,7 +10,7 @@ def istaiko(f):
 
 
 def listnotes(f):
-    f2 = open(f, 'r')
+    f2 = open(f, 'r', encoding='utf8')
     notes = []
 
     # We gotta do this kinda shit mate, but lazy to find a better alternative lol
