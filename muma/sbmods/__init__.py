@@ -2,8 +2,5 @@
 Taiko SB Mods Package
 """
 
-import base
-import counters
-import allmods
-import transformations
-import tweentypes
+import muma.sbmods.transformations
+import muma.sbmods.tweentypes

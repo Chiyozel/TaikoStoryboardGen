@@ -9,7 +9,7 @@ class AngleScroll(BasicMod):
     def mod_setup(self):
         print("Angle in Degrees")
         while True:
-            angle_str = raw_input(">>>")
+            angle_str = input(">>>")
             if isfloat(angle_str):
                 break
         self.angle = muma.note_mods.sbUtils.sbUtils.convert_deg_to_rad(float(angle_str))
@@ -19,7 +19,11 @@ class AngleScroll(BasicMod):
         playfield_length = int(findsetting("PlayfieldLength"))
         note_in = int(note.t - (60000 / self.bpm * (4 / self.scroll)))
 
-        # Note
+        """
+        +------+
+        | Note |
+        +------+
+        """
         r_string += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
             "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
         r_string += " M,0,{},{},{},{},{},{}\n".format(note_in,
@@ -37,10 +41,14 @@ class AngleScroll(BasicMod):
 
         if self.is_upside_down:
             r_string += " P,0,{},,V\n".format(note_in)
-        elif self.is_mirror:
+        if self.is_mirror:
             r_string += " P,0,{},,H\n".format(note_in)
 
-        # Note Overlay
+        """
+        +--------------+
+        | Note Overlay |
+        +--------------+
+        """
         r_string += muma.note_mods.sbUtils.sbUtils.overlay(note, self.color)
         r_string += " M,0,{},{},{},{},{},{}\n".format(note_in,
                                                       note.t,
@@ -54,5 +62,9 @@ class AngleScroll(BasicMod):
         r_string += " R,0,{},,{}\n".format(note.t, self.angle)
         r_string += muma.note_mods.sbUtils.sbUtils.scale_big(note)
         r_string += n_trans(note, self.color, note_in, True)
+        if self.is_upside_down:
+            r_string += " P,0,{},,V\n".format(note_in)
+        if self.is_mirror:
+            r_string += " P,0,{},,H\n".format(note_in)
 
         return r_string

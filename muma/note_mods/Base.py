@@ -19,28 +19,28 @@ class BasicMod:
     def setup(self):
         print("Scroll Speed Multiplier")
         while True:
-            speed_str = raw_input(">>>")
+            speed_str = input(">>>")
             if isfloat(speed_str):
                 break
         self.scroll = max(float(speed_str), 0.001)
 
         print("Reverse?\t0=No\t1=Yes")
         while True:
-            r_ = raw_input(">>>")
+            r_ = input(">>>")
             if r_.isdigit() and 0 <= int(r_) <= 1:
                 break
         self.is_reverse = False if int(r_) == 0 else True
 
         print("Upside down?\t0=No\t1=Yes")
         while True:
-            r_ = raw_input(">>>")
+            r_ = input(">>>")
             if r_.isdigit() and 0 <= int(r_) <= 1:
                 break
         self.is_upside_down = False if int(r_) == 0 else True
 
         print("Mirror notes?\t0=No\t1=Yes")
         while True:
-            r_ = raw_input(">>>")
+            r_ = input(">>>")
             if r_.isdigit() and 0 <= int(r_) <= 1:
                 break
         self.is_mirror = False if int(r_) == 0 else True

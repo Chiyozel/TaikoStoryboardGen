@@ -1,5 +1,5 @@
-from hitsound import Hitsound
-from notetype import NoteType
+from muma.osu.notes.hitsound import Hitsound
+from muma.osu.notes.notetype import NoteType
 
 
 class Note:

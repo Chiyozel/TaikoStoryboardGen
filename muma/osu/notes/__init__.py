@@ -1,3 +1,3 @@
-from hitsound import Hitsound
-from note import Note
-from notetype import NoteType
+from muma.osu.notes.hitsound import Hitsound
+from muma.osu.notes.note import Note
+from muma.osu.notes.notetype import NoteType

@@ -1,4 +1,4 @@
-from notes import NoteType, Note
+from muma.osu.notes import NoteType, Note
 
 
 def istaiko(f):

@@ -20,7 +20,11 @@ class ScrollTween(BasicMod):
         note_in = int(note.t - (60000 / self.bpm * (4 / self.scroll)))
         playfield_length = int(findsetting("PlayfieldLength"))
 
-        # Note
+        """
+        +------+
+        | Note |
+        +------+
+        """
         r_string += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
             "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
         r_string += " MY,{},{},,{}\n".format(self.tween,
@@ -38,10 +42,14 @@ class ScrollTween(BasicMod):
 
         if self.is_upside_down:
             r_string += " P,0,{},,V\n".format(note_in)
-        elif self.is_mirror:
+        if self.is_mirror:
             r_string += " P,0,{},,H\n".format(note_in)
 
-        # Note Overlay
+        """
+        +--------------+
+        | Note Overlay |
+        +--------------+
+        """
         r_string += muma.note_mods.sbUtils.sbUtils.overlay(note, self.color)
         r_string += " MY,{},{},,{}\n".format(self.tween,
                                              note_in,
@@ -57,7 +65,7 @@ class ScrollTween(BasicMod):
 
         if self.is_upside_down:
             r_string += " P,0,{},,V\n".format(note_in)
-        elif self.is_mirror:
+        if self.is_mirror:
             r_string += " P,0,{},,H\n".format(note_in)
 
         return r_string

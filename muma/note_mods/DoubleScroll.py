@@ -10,13 +10,13 @@ class DoubleScroll(BasicMod):
     def mod_setup(self):
         print("(Don) Angle in Degrees")
         while True:
-            d_angle_str = raw_input(">>>")
+            d_angle_str = input(">>>")
             if isfloat(d_angle_str):
                 break
         self.d_angle = muma.note_mods.sbUtils.sbUtils.convert_deg_to_rad(float(d_angle_str))
         print("(Kat) Angle in Degrees")
         while True:
-            k_angle_str = raw_input(">>>")
+            k_angle_str = input(">>>")
             if isfloat(d_angle_str):
                 break
         self.k_angle = muma.note_mods.sbUtils.sbUtils.convert_deg_to_rad(float(k_angle_str))
@@ -28,7 +28,11 @@ class DoubleScroll(BasicMod):
         hitsound = Hitsound(note.hs)
         note_type = NoteType(note.note_type)
 
-        # Note/Don
+        """
+        +------+
+        | Note |
+        +------+
+        """
         r_string += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
             "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
         r_string += " M,0,{},{},{},{},{},{}\n".format(note_in,
@@ -48,10 +52,14 @@ class DoubleScroll(BasicMod):
 
         if self.is_upside_down:
             r_string += " P,0,{},,V\n".format(note_in)
-        elif self.is_mirror:
+        if self.is_mirror:
             r_string += " P,0,{},,H\n".format(note_in)
 
-        # Note Overlay
+        """
+        +--------------+
+        | Note Overlay |
+        +--------------+
+        """
         r_string += muma.note_mods.sbUtils.sbUtils.overlay(note, self.color)
         r_string += " M,0,{},{},{},{},{},{}\n".format(note_in,
                                                       note.t,
@@ -67,5 +75,9 @@ class DoubleScroll(BasicMod):
                                            self.k_angle if hitsound.iskat() or note_type.isspinner() else self.d_angle)
         r_string += muma.note_mods.sbUtils.sbUtils.scale_big(note)
         r_string += n_trans(note, self.color, note_in, True)
+        if self.is_upside_down:
+            r_string += " P,0,{},,V\n".format(note_in)
+        if self.is_mirror:
+            r_string += " P,0,{},,H\n".format(note_in)
 
         return r_string

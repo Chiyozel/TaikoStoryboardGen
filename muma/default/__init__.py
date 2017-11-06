@@ -1,1 +1,1 @@
-import settings
+from muma.default import settings

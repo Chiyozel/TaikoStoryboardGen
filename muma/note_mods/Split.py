@@ -14,7 +14,11 @@ class Split(BasicMod):
         note_in = int(note.t - (60000 / self.bpm * 4))
         playfield_length = int(findsetting("PlayfieldLength"))
 
-        # Note
+        """
+        +------+
+        | Note |
+        +------+
+        """
         r_string += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
             "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
 
@@ -37,10 +41,14 @@ class Split(BasicMod):
 
         if self.is_upside_down:
             r_string += " P,0,{},,V\n".format(note_in)
-        elif self.is_mirror:
+        if self.is_mirror:
             r_string += " P,0,{},,H\n".format(note_in)
 
-        # Note Overlay
+        """
+        +--------------+
+        | Note Overlay |
+        +--------------+
+        """
         r_string += muma.note_mods.sbUtils.sbUtils.overlay(note, self.color)
         r_string += n_trans(note, self.color, note_in, True)
         r_string += " MY,0,{},,{}\n".format(note_in,
@@ -55,6 +63,10 @@ class Split(BasicMod):
                                                      note.t,
                                                      self.receptor_x() + playfield_length * (-1 if self.is_reverse else 1),
                                                      self.receptor_x())
+        if self.is_upside_down:
+            r_string += " P,0,{},,V\n".format(note_in)
+        if self.is_mirror:
+            r_string += " P,0,{},,H\n".format(note_in)
 
         return r_string
 

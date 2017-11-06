@@ -1,5 +1,5 @@
-import default
-import modstypes
-import sbmods
-import storyboardmods
-import utils
+import muma.default
+import muma.modstypes
+import muma.sbmods
+import muma.storyboardmods
+import muma.utils

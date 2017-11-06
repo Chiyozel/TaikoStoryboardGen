@@ -14,7 +14,7 @@ def promptmaps(listmaps):
         x += 1
     r_str = ""
     while not r_str.isdigit():
-        r_str = raw_input(">>>")
+        r_str = input(">>>")
     return int(r_str)
 
 
@@ -39,7 +39,7 @@ def findsetting(setting):
 
 
 def f(x):
-    if type(x) is str or type(x) is unicode:
+    if type(x) is str:
         return False if x.lower() == "false" else True if x.lower() == "true" else x
     else:
         return x

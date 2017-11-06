@@ -10,14 +10,14 @@ class Clock(BasicMod):
     def mod_setup(self):
         print("Length of a Clock revolution in beats")
         while True:
-            len_str = raw_input(">>>")
+            len_str = input(">>>")
             if isfloat(len_str):
                 break
         self.beat_len = min(float(len_str), 32)
 
         print("Radius of the clock")
         while True:
-            rad_srt = raw_input(">>>")
+            rad_srt = input(">>>")
             if rad_srt.isdigit():
                 break
         self.clock_rad = int(rad_srt)
@@ -28,14 +28,14 @@ class Clock(BasicMod):
     def setup(self):
         print("Reverse?\t0=No\t1=Yes")
         while True:
-            r_ = raw_input(">>>")
+            r_ = input(">>>")
             if r_.isdigit() and 0 <= int(r_) <= 1:
                 break
         self.is_reverse = False if int(r_) == 0 else True
 
         print("Mirror notes?\t0=No\t1=Yes")
         while True:
-            r_ = raw_input(">>>")
+            r_ = input(">>>")
             if r_.isdigit() and 0 <= int(r_) <= 1:
                 break
         self.is_mirror = False if int(r_) == 0 else True
@@ -53,7 +53,11 @@ class Clock(BasicMod):
                 (note_beat / ((-1 if self.is_reverse else 1) * self.beat_len)) * (2 * math.pi) - 0.5 * math.pi)
             note_x, note_y = int(note_x), int(note_y)
 
-            # Note
+            """
+            +------+
+            | Note |
+            +------+
+            """
             r_string += "Sprite,Foreground,Centre,\"{}.png\",320,240\n".format(
                 "taikohitcircle" if findsetting("UseSkinElements") else "SB/note")
             r_string += " MY,0,{},{},{}\n".format(note_in, note_out, note_y)
@@ -64,7 +68,11 @@ class Clock(BasicMod):
             if self.is_mirror:
                 r_string += " P,0,{},,H\n".format(note_in)
 
-            # Note Overlay
+            """
+            +--------------+
+            | Note Overlay |
+            +--------------+
+            """
             r_string += muma.note_mods.sbUtils.sbUtils.overlay_clock(note, self.color)
             r_string += " MY,0,{},{},{}\n".format(note_in, note_out, note_y)
             r_string += " MX,0,{},{},{}\n".format(note_in, note_out, note_x)
