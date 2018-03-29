@@ -24,6 +24,7 @@ scrollingtypes = [
     "Clock",
     "Receptor Wave",
     "Double Scroll",
+    "Vibrate",
 ]
 notealterations = [
     "None",

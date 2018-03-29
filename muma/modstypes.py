@@ -83,6 +83,9 @@ def note_mods(y, z, notes, bpm):
         if case2(15):
             d_scroll = mods.DoubleScroll(notes, bpm, z)
             out = d_scroll.make_sb()
+        if case2(16):
+            vib = mods.Vibrate(notes, bpm, z)
+            out = vib.make_sb()
     return out
 
 

@@ -16,3 +16,4 @@ from muma.note_mods.TangentZ import TangentZ
 from muma.note_mods.VisionCone import VisionCone
 from muma.note_mods.DoubleScroll import DoubleScroll
 from muma.note_mods.TaikoBarBase import TaikoBarBase
+from muma.note_mods.Vibrate import Vibrate
